@@ -1,0 +1,35 @@
+import {} from "express";
+import CartRepository from "../repository/cart.js";
+import Cart from "../models/Cart.js";
+export default class CartController {
+    cartRepository;
+    constructor() {
+        this.cartRepository = new CartRepository();
+    }
+    async addToCart(req, res) {
+        try {
+            const { user_id, variant_id, quantity } = req.body;
+            const newCartItem = new Cart(0, user_id, variant_id, quantity);
+            const cart = await this.cartRepository.create(newCartItem);
+            return res
+                .status(201)
+                .json({ message: "Item added to cart", cartId: cart });
+        }
+        catch (error) {
+            console.error("Error adding to cart:", error);
+            return res.status(500).json({ error: "Failed to add item to cart" });
+        }
+    }
+    async getCartByUserId(req, res) {
+        try {
+            const userId = parseInt(req.params.user_id, 10);
+            const cartItems = await this.cartRepository.findByUserId(userId);
+            return res.status(200).json(cartItems);
+        }
+        catch (error) {
+            console.error("Error retrieving cart items:", error);
+            return res.status(500).json({ error: "Failed to retrieve cart items" });
+        }
+    }
+}
+//# sourceMappingURL=CartController.js.map
