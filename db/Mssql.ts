@@ -7,7 +7,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load env
-dotenv.config({ path: path.resolve(process.cwd(), "config/config.env") });
+//dotenv.config({ path: path.resolve(process.cwd(), "config/config.env") });
+
+dotenv.config();
 
 const DBConnect: mssql.config = {
   user: process.env.USER,
