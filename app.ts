@@ -1,7 +1,10 @@
-import express, { type Response } from "express";
+import express, { type Request, type Response } from "express";
 import cookieParser from "cookie-parser";
+import expressFileupload from "express-fileupload";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { sql, getPool } from "./db/Mssql.js";
 dotenv.config();
 
 const app = express();
@@ -14,11 +17,43 @@ app.use(
   })
 );
 app.use(cookieParser());
-//app.use(express.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (_, res: Response) => {
   res.send("API is running....");
+});
+
+app.post("/api/upload", (req: Request, res: Response) => {
+  const files = (req as any).files?.images;
+  if (!files) {
+    return res.status(400).json({ message: "No files were uploaded." });
+  }
+  const list = Array.isArray(files) ? files : [files];
+  list.forEach((file: any) => {
+    const uploadPath = path.join(__dirname, "uploads", Date.now() + file.name);
+    file.mv(uploadPath, (err: any) => {
+      if (err) return res.status(500).json({ error: err.message });
+    });
+  });
+  const uploadedFiles = list.map((file: any) => ({
+    name: file.name,
+    mimetype: file.mimetype,
+    size: file.size,
+  }));
+  res.json({ message: "Upload thành công!", files: uploadedFiles });
+});
+getPool()
+  .then(() => {
+    console.log("MSSQL Database connected successfully");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MSSQL Database:", err);
+  });
+
+app.use((req, res, next) => {
+  console.log("Time:", Date.now(), req.method, req.url);
+  next();
 });
 
 if (process.env.NODE_ENV !== "production") {
