@@ -3,7 +3,12 @@ import cookieParser from "cookie-parser";
 import expressFileupload from "express-fileupload";
 import cors from "cors";
 import dotenv from "dotenv";
+import authRouter from "./routes/auth.js";
+//import morgan from "morgan";
 import path from "path";
+import brandRouter from "./routes/brand.js";
+import VNPayPaymentRouter from "./routes/VNPay_payment.js";
+import MoMoPaymentRouter from "./routes/MOMO_payment.js";
 import { sql, getPool } from "./db/Mssql.js";
 dotenv.config();
 
@@ -19,6 +24,13 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/v1/auth", authRouter);
+// app.use("/api/v1/user", userRouter);
+app.use("/api/v1/brand", brandRouter);
+// app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/payment", VNPayPaymentRouter);
+app.use("/api/v1/momo-payment", MoMoPaymentRouter);
 
 app.get("/", (_, res: Response) => {
   res.send("API is running....");
