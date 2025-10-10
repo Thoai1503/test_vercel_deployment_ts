@@ -50,6 +50,9 @@ app.use((req, res, next) => {
     console.log("Time:", Date.now(), req.method, req.url);
     next();
 });
+app.get("/myjson", (req, res, next) => {
+    res.json({ message: "my-api" });
+});
 if (process.env.NODE_ENV !== "production") {
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {

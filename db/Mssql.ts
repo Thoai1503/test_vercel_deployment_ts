@@ -7,15 +7,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load env
-//dotenv.config({ path: path.resolve(process.cwd(), "config/config.env") });
+dotenv.config({ path: path.resolve(process.cwd(), "config/config.env") });
 
-dotenv.config();
+//dotenv.config();
 
 const DBConnect: mssql.config = {
-  user: process.env.USER,
-  password: process.env.PASSWORD,
+  user: process.env.USER || "John333_SQLLogin_1",
+  password: process.env.PASSWORD || "1etw5yoon4",
   server: process.env.DB_SERVER || "Catalog_ElectricStoreDB.mssql.somee.com",
-  database: process.env.DB,
+  database: process.env.DB || "Catalog_ElectricStoreDB",
   port: parseInt(process.env.DB_PORT!) || 1433,
   options: {
     encrypt: true,

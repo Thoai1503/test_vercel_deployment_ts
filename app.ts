@@ -43,7 +43,7 @@ app.post("/api/upload", (req: Request, res: Response) => {
   }));
   res.json({ message: "Upload thành công!", files: uploadedFiles });
 });
-getPool()
+await getPool()
   .then(() => {
     console.log("MSSQL Database connected successfully");
   })
