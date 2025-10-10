@@ -1,4 +1,5 @@
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
 export default class PasswordService {
   private saltRounds: number;

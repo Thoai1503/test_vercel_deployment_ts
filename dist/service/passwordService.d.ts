@@ -6,8 +6,8 @@ export default class PasswordService {
     private requireNumbers;
     private requireSpecialChars;
     constructor();
-    hashPassword(password: string): Promise<any>;
-    comparePassword(password: string, hash: string): Promise<any>;
+    hashPassword(password: string): Promise<string>;
+    comparePassword(password: string, hash: string): Promise<boolean>;
     validatePassword(password: string): {
         isValid: boolean;
         errors: string[];
