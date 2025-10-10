@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import JWTService from "../service/jwtService.js";
 export interface TokenPair {
   accessToken: string;
@@ -119,14 +120,14 @@ export default class User {
   // Keep bcrypt require inside method to reduce circular dependency risk during gradual migration
   async hashPassword(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const bcrypt = require("bcryptjs");
+
     const saltRounds = 10;
     this.password = await bcrypt.hash(String(this.password), saltRounds);
   }
 
   async comparePassword(plain: string): Promise<boolean> {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const bcrypt = require("bcryptjs");
+    // const bcrypt = require("bcryptjs");
     // stored password may contain whitespace — trim for safety
     return await bcrypt.compare(String(plain), String(this.password).trim());
   }
