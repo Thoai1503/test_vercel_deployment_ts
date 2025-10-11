@@ -47,7 +47,7 @@ export default class CartController {
         quantity
       );
       console.log("update result: " + result);
-      return res.sendStatus(200).json({ message: result });
+      return res.status(200).json({ message: result });
     } catch (error) {
       console.error("Error retrieving cart items:", error);
       return res.status(500).json({ error: "Failed to retrieve cart items" });

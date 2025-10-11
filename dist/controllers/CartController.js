@@ -37,7 +37,7 @@ export default class CartController {
             const quantity = parseInt(req.body.quantity, 10);
             const result = await this.cartRepository.updateQuantity(cartItemId, quantity);
             console.log("update result: " + result);
-            return res.sendStatus(200).json({ message: result });
+            return res.status(200).json({ message: result });
         }
         catch (error) {
             console.error("Error retrieving cart items:", error);
