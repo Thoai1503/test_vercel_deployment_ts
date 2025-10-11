@@ -31,5 +31,18 @@ export default class CartController {
             return res.status(500).json({ error: "Failed to retrieve cart items" });
         }
     }
+    async updateQuantity(req, res) {
+        try {
+            const cartItemId = parseInt(req.params.id, 10);
+            const quantity = parseInt(req.body.quantity, 10);
+            const result = await this.cartRepository.updateQuantity(cartItemId, quantity);
+            console.log("update result: " + result);
+            return res.sendStatus(200).json({ message: result });
+        }
+        catch (error) {
+            console.error("Error retrieving cart items:", error);
+            return res.status(500).json({ error: "Failed to retrieve cart items" });
+        }
+    }
 }
 //# sourceMappingURL=CartController.js.map

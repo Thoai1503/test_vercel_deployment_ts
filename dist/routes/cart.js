@@ -6,5 +6,6 @@ router.route("/").post(cartController.addToCart.bind(cartController));
 router
     .route("/user/:user_id")
     .get(cartController.getCartByUserId.bind(cartController));
+router.route("/:id").post(cartController.updateQuantity.bind(cartController));
 export default router;
 //# sourceMappingURL=cart.js.map
