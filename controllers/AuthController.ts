@@ -3,11 +3,13 @@ import UserRepository from "../repository/user.js";
 import User from "../models/User.js";
 import express, { type Request, type Response } from "express";
 import PasswordService from "../service/passwordService.js";
+import JWTService from "../service/jwtService.js";
 // import UserRepository from "../repository/user";
 
 export default class AuthController {
   private userRepository: UserRepository;
   private passwordService: PasswordService = new PasswordService();
+  private jwtService: JWTService = new JWTService();
   constructor(userRepository: UserRepository) {
     this.userRepository = userRepository;
   }
@@ -205,11 +207,10 @@ export default class AuthController {
         });
       }
 
-      const jwtService = require("../service/jwtService");
-      const decoded = jwtService.verifyRefreshToken(refreshToken);
+      const decoded = this.jwtService.verifyRefreshToken(refreshToken) as any;
 
       // Get user from database
-      const user = await this.userRepository.getUserById(decoded.id);
+      const user = await this.userRepository.getUserById(decoded?.id);
       if (!user) {
         return res.status(401).json({
           success: false,

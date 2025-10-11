@@ -4,6 +4,7 @@ import express, { type Request, type Response } from "express";
 export default class AuthController {
     private userRepository;
     private passwordService;
+    private jwtService;
     constructor(userRepository: UserRepository);
     login: (req: Request, res: Response, next: express.NextFunction) => Promise<express.Response<any, Record<string, any>> | undefined>;
     register: (req: Request, res: Response, next: express.NextFunction) => Promise<express.Response<any, Record<string, any>> | undefined>;
