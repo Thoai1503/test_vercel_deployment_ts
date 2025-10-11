@@ -7,6 +7,7 @@ export default class CartRepository implements IRepository<Cart> {
     findAll(): Promise<Cart[]>;
     update(id: number, item: any): Promise<boolean>;
     delete(id: number): Promise<boolean>;
+    updateQuantity(id: number, quantity: number): Promise<boolean>;
     findByUserId(user_id: number): Promise<Cart[]>;
 }
 //# sourceMappingURL=cart.d.ts.map

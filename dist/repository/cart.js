@@ -9,7 +9,7 @@ export default class CartRepository {
             request.input("user_id", sql.Int, cart.getUserId());
             request.input("variant_id", sql.Int, cart.getVariantId());
             request.input("quantity", sql.Int, cart.getQuantity());
-            const result = await request.query("INSERT INTO carts (user_id, variant_id, quantity) VALUES (@user_id, @variant_id, @quantity); SELECT SCOPE_IDENTITY() AS id");
+            const result = await request.query("INSERT INTO cart (user_id, variant_id, quantity) VALUES (@user_id, @variant_id, @quantity); SELECT SCOPE_IDENTITY() AS id");
             return result.recordset[0].id;
         }
         catch (error) {
@@ -29,12 +29,28 @@ export default class CartRepository {
     async delete(id) {
         throw new Error("Method not implemented.");
     }
+    async updateQuantity(id, quantity) {
+        try {
+            const pool = await getPool();
+            const request = pool.request();
+            request.input("id", sql.Int, id);
+            request.input("quantity", sql.Int, quantity);
+            const result = await request.query(`UPDATE cart 
+         SET quantity = @quantity 
+         WHERE id = @id`);
+            return result.rowsAffected[0] > 0;
+        }
+        catch (error) {
+            console.error(`Error updating cart quantity ${id}:`, error);
+            throw error;
+        }
+    }
     async findByUserId(user_id) {
         try {
             const pool = await getPool();
             const request = pool.request();
             request.input("user_id", sql.Int, user_id);
-            const result = await request.query("SELECT * FROM carts  WHERE user_id = @user_id");
+            const result = await request.query("select * from cart c join product_variants pv on c.variant_id = pv.id join product_image pim on pim.variant_id= c.variant_id where  c.user_id=@user_id");
             return result.recordset.map((cart) => new Cart(cart.id, cart.user_id, cart.variant_id, cart.quantity));
         }
         catch (error) {
