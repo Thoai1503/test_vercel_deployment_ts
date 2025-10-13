@@ -1,7 +1,6 @@
 // const jwtService = require("../service/jwtService");
 // const User = require("../model/User");
 import jwtService from "../service/jwtService.js";
-import User from "../models/User.js";
 import express, {} from "express";
 export default class AuthMiddleware {
     jwtService;
