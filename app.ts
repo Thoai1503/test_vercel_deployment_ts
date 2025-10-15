@@ -9,6 +9,7 @@ import path from "path";
 import brandRouter from "./routes/brand.js";
 import cartRouter from "./routes/cart.js";
 import proviceRouter from "./routes/province.js";
+import districtRouter from "./routes/district.js";
 import VNPayPaymentRouter from "./routes/VNPay_payment.js";
 import MoMoPaymentRouter from "./routes/MOMO_payment.js";
 import { sql, getPool } from "./db/Mssql.js";
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/district", districtRouter);
 app.use("/api/v1/province", proviceRouter);
 // app.use("/api/v1/user", userRouter);
 app.use("/api/v1/brand", brandRouter);

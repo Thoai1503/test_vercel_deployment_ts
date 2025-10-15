@@ -22,7 +22,7 @@ export default class ProviceRepository implements IRepository<Province> {
         (item) => new Province(item.id, item.name, item.code, item.status)
       );
     } catch (error) {
-      console.error("Error creating cart:", error);
+      console.error("Error:", error);
       throw error;
     }
   }
