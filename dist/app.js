@@ -1,6 +1,7 @@
 import express, {} from "express";
 import cookieParser from "cookie-parser";
 import expressFileupload from "express-fileupload";
+import prisma from "./prisma/client.js";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.js";
@@ -33,6 +34,24 @@ app.use("/api/v1/cart", cartRouter);
 // app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/payment", VNPayPaymentRouter);
 app.use("/api/v1/momo-payment", MoMoPaymentRouter);
+app.get("/broadgame", async (_, res) => {
+    const broadgame = await prisma.boardGames.findMany({
+        include: {
+            BoardGames_Domains: {
+                include: {
+                    Domains: true, // lấy thông tin domain liên kết
+                },
+            },
+            BoardGames_Mechanics: {
+                include: {
+                    Mechanics: true, // lấy thông tin mechanic liên kết
+                },
+            },
+        },
+    });
+    console.log("Data: " + broadgame);
+    res.json(broadgame);
+});
 app.get("/", (_, res) => {
     res.send("API is running....");
 });
