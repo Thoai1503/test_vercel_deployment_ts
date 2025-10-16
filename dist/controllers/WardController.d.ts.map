@@ -1,0 +1,1 @@
+{"version":3,"file":"WardController.d.ts","sourceRoot":"","sources":["../../controllers/WardController.ts"],"names":[],"mappings":"AACA,OAAO,OAAO,EAAE,EAAE,KAAK,OAAO,EAAE,KAAK,QAAQ,EAAE,MAAM,SAAS,CAAC;AAE/D,MAAM,CAAC,OAAO,OAAO,cAAc;IACjC,OAAO,CAAC,cAAc,CAAiB;;IAIvC,eAAe,GACb,KAAK,OAAO,EACZ,KAAK,QAAQ,EACb,MAAM,OAAO,CAAC,YAAY,yDAM1B;CACH"}

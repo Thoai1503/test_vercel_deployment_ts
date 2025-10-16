@@ -11,6 +11,7 @@ import brandRouter from "./routes/brand.js";
 import cartRouter from "./routes/cart.js";
 import proviceRouter from "./routes/province.js";
 import districtRouter from "./routes/district.js";
+import wardRouter from "./routes/ward.js";
 import VNPayPaymentRouter from "./routes/VNPay_payment.js";
 import MoMoPaymentRouter from "./routes/MOMO_payment.js";
 import { sql, getPool } from "./db/Mssql.js";
@@ -30,6 +31,7 @@ app.use("/api/v1/district", districtRouter);
 app.use("/api/v1/province", proviceRouter);
 // app.use("/api/v1/user", userRouter);
 app.use("/api/v1/brand", brandRouter);
+app.use("/api/v1/ward", wardRouter);
 app.use("/api/v1/cart", cartRouter);
 // app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/payment", VNPayPaymentRouter);
@@ -49,7 +51,7 @@ app.get("/broadgame", async (_, res) => {
             },
         },
     });
-    console.log("Data: " + broadgame);
+    console.log("Data: " + JSON.stringify(broadgame));
     res.json(broadgame);
 });
 app.get("/", (_, res) => {
