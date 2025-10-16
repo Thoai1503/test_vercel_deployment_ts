@@ -43,20 +43,7 @@ app.use("/api/v1/payment", VNPayPaymentRouter);
 app.use("/api/v1/momo-payment", MoMoPaymentRouter);
 
 app.get("/broadgame", async (_, res: Response) => {
-  const broadgame = await prisma.boardGames.findMany({
-    include: {
-      BoardGames_Domains: {
-        include: {
-          Domains: true, // lấy thông tin domain liên kết
-        },
-      },
-      BoardGames_Mechanics: {
-        include: {
-          Mechanics: true, // lấy thông tin mechanic liên kết
-        },
-      },
-    },
-  });
+  const broadgame = await prisma.brands.findMany();
   console.log("Data: " + JSON.stringify(broadgame));
   res.json(broadgame);
 });
