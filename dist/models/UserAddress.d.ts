@@ -15,6 +15,18 @@ export default class UserAddress {
     constructor(id?: number, user_id?: number, full_name?: string, phone?: string, province_id?: number, district_id?: number, ward_id?: number, address_detail?: string, address_type?: number, is_default?: boolean, status?: number, created_at?: Date, updated_at?: Date);
     getId(): number;
     setId(value: number): void;
+    getUserId(): number;
+    setUserId(user_id: number): void;
+    getPhone(): string;
+    getProvinceId(): number;
+    getDistrictId(): number;
+    getWardId(): number;
+    getAddressDetail(): string;
+    getAddressType(): number;
+    getIsDefault(): boolean;
+    getStatus(): number;
+    getCreatedDate(): Date;
+    getUpdatedAt(): Date;
     getFullName(): string;
     setFullName(value: string): void;
 }

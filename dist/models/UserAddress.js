@@ -34,6 +34,42 @@ export default class UserAddress {
     setId(value) {
         this.id = value;
     }
+    getUserId() {
+        return this.user_id;
+    }
+    setUserId(user_id) {
+        this.user_id = user_id;
+    }
+    getPhone() {
+        return this.phone;
+    }
+    getProvinceId() {
+        return this.province_id;
+    }
+    getDistrictId() {
+        return this.district_id;
+    }
+    getWardId() {
+        return this.ward_id;
+    }
+    getAddressDetail() {
+        return this.address_detail;
+    }
+    getAddressType() {
+        return this.address_type;
+    }
+    getIsDefault() {
+        return this.is_default;
+    }
+    getStatus() {
+        return this.status;
+    }
+    getCreatedDate() {
+        return this.created_at;
+    }
+    getUpdatedAt() {
+        return this.updated_at;
+    }
     getFullName() {
         return this.full_name;
     }

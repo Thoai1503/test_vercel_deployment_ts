@@ -51,6 +51,42 @@ export default class UserAddress {
   public setId(value: number) {
     this.id = value;
   }
+  public getUserId(): number {
+    return this.user_id;
+  }
+  public setUserId(user_id: number) {
+    this.user_id = user_id;
+  }
+  public getPhone(): string {
+    return this.phone;
+  }
+  public getProvinceId(): number {
+    return this.province_id;
+  }
+  public getDistrictId(): number {
+    return this.district_id;
+  }
+  public getWardId(): number {
+    return this.ward_id;
+  }
+  public getAddressDetail(): string {
+    return this.address_detail;
+  }
+  public getAddressType(): number {
+    return this.address_type;
+  }
+  public getIsDefault(): boolean {
+    return this.is_default;
+  }
+  public getStatus(): number {
+    return this.status;
+  }
+  public getCreatedDate(): Date {
+    return this.created_at;
+  }
+  public getUpdatedAt(): Date {
+    return this.updated_at;
+  }
 
   public getFullName(): string {
     return this.full_name;
