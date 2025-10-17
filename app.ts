@@ -9,6 +9,7 @@ import authRouter from "./routes/auth.js";
 //import morgan from "morgan";
 import path from "path";
 import brandRouter from "./routes/brand.js";
+import userAddressRouter from "./routes/userAddress.js";
 import cartRouter from "./routes/cart.js";
 import proviceRouter from "./routes/province.js";
 import districtRouter from "./routes/district.js";
@@ -33,12 +34,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/district", districtRouter);
+app.use("/api/v1/useraddress", userAddressRouter);
 app.use("/api/v1/province", proviceRouter);
-// app.use("/api/v1/user", userRouter);
+
 app.use("/api/v1/brand", brandRouter);
 app.use("/api/v1/ward", wardRouter);
 app.use("/api/v1/cart", cartRouter);
-// app.use("/api/v1/category", categoryRouter);
+
 app.use("/api/v1/payment", VNPayPaymentRouter);
 app.use("/api/v1/momo-payment", MoMoPaymentRouter);
 
