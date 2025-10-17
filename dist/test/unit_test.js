@@ -9,5 +9,6 @@ const list = await districtRepository.getByProvinceId(1);
 const wards = await wardRepository.getByDistrictId(3);
 const ua = new UserAddress(0, 2, "Thoai Thiên Long", "0976111111", 1, 1, 1, "3 Đường 3/2", 1, false, 1, new Date(), new Date());
 const create = await userAddressRepository.create(ua);
-console.log("List: " + JSON.stringify(create));
+const userAddress = await userAddressRepository.findByUserId(2);
+console.log("List: " + JSON.stringify(userAddress));
 //# sourceMappingURL=unit_test.js.map

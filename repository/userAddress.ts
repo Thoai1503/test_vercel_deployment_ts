@@ -37,4 +37,22 @@ export default class UserAddressRepository implements IRepository<UserAddress> {
   async delete(id: number): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
+  async findByUserId(user_id: number) {
+    try {
+      const result = await prisma.user_addresses.findMany({
+        where: {
+          user_id: user_id,
+        },
+        include: {
+          users: true,
+          provinces: true,
+          districts: true,
+          wards: true,
+        },
+      });
+      return result;
+    } catch (error) {
+      throw new Error("lỗi: " + error);
+    }
+  }
 }

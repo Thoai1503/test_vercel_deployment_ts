@@ -32,4 +32,10 @@ export default class UserAddressController {
     const result = await this.userAddressRepository.create(ua);
     res.status(201).json(result);
   };
+  findByUserId = async (req: Request, res: Response, next: NextFunction) => {
+    const list = await this.userAddressRepository.findByUserId(
+      parseInt(req.body.user_id)
+    );
+    res.status(200).json(list);
+  };
 }

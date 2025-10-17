@@ -23,5 +23,6 @@ const ua = new UserAddress(
   new Date()
 );
 const create = await userAddressRepository.create(ua);
+const userAddress = await userAddressRepository.findByUserId(2);
 
-console.log("List: " + JSON.stringify(create));
+console.log("List: " + JSON.stringify(userAddress));

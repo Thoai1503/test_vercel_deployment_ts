@@ -36,5 +36,24 @@ export default class UserAddressRepository {
     async delete(id) {
         throw new Error("Method not implemented.");
     }
+    async findByUserId(user_id) {
+        try {
+            const result = await prisma.user_addresses.findMany({
+                where: {
+                    user_id: user_id,
+                },
+                include: {
+                    users: true,
+                    provinces: true,
+                    districts: true,
+                    wards: true,
+                },
+            });
+            return result;
+        }
+        catch (error) {
+            throw new Error("lỗi: " + error);
+        }
+    }
 }
 //# sourceMappingURL=userAddress.js.map
