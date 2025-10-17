@@ -12,7 +12,7 @@ export default class UserAddressController {
         res.status(201).json(result);
     };
     findByUserId = async (req, res, next) => {
-        const list = await this.userAddressRepository.findByUserId(parseInt(req.body.user_id));
+        const list = await this.userAddressRepository.findByUserId(parseInt(req.params.user_id));
         res.status(200).json(list);
     };
 }

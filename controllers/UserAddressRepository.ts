@@ -34,7 +34,7 @@ export default class UserAddressController {
   };
   findByUserId = async (req: Request, res: Response, next: NextFunction) => {
     const list = await this.userAddressRepository.findByUserId(
-      parseInt(req.body.user_id)
+      parseInt(req.params.user_id!)
     );
     res.status(200).json(list);
   };
