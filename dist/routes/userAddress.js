@@ -1,6 +1,6 @@
 import express from "express";
 var router = express.Router();
-import UserAddressController from "../controllers/UserAddressRepository.js";
+import UserAddressController from "../controllers/UserAddressController.js";
 const userAddressController = new UserAddressController();
 router
     .route("/")

@@ -8,6 +8,5 @@ export interface UserAddressData {
     address_detail: string;
     address_type: number;
     is_default: boolean;
-    updated_at?: Date;
 }
 //# sourceMappingURL=UserAddressData.d.ts.map
