@@ -21,7 +21,7 @@ export default class UserAddressRepository {
             return 1;
         }
         catch (error) {
-            throw error;
+            throw new Error("Lỗi: " + error);
         }
     }
     async findAll() {

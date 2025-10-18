@@ -22,7 +22,7 @@ export default class UserAddressRepository implements IRepository<UserAddress> {
       if (!result) return 0;
       return 1;
     } catch (error) {
-      throw error;
+      throw new Error("Lỗi: " + error);
     }
   }
   async findAll(): Promise<UserAddress[]> {
