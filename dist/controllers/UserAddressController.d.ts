@@ -4,5 +4,6 @@ export default class UserAddressController {
     constructor();
     createNewAddress: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     findByUserId: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    updateAddress: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 }
 //# sourceMappingURL=UserAddressController.d.ts.map

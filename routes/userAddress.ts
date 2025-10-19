@@ -9,4 +9,7 @@ router
 router
   .route("/user/:user_id")
   .get(userAddressController.findByUserId.bind(userAddressController));
+router
+  .route("/:id")
+  .put(userAddressController.updateAddress.bind(userAddressController));
 export default router;

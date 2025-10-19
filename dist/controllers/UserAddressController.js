@@ -15,5 +15,11 @@ export default class UserAddressController {
         const list = await this.userAddressRepository.findByUserId(parseInt(req.params.user_id));
         res.status(200).json(list);
     };
+    updateAddress = async (req, res, next) => {
+        const address = req.body;
+        const ua = new UserAddress(address.id, address.user_id, address.full_name, address.phone, address.province_id, address.district_id, address.ward_id, address.address_detail, 1, address.is_default, 1, new Date(), new Date());
+        const result = await this.userAddressRepository.update(parseInt(req.params.id), ua);
+        res.status(200).json(result);
+    };
 }
 //# sourceMappingURL=UserAddressController.js.map

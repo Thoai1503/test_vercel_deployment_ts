@@ -4,7 +4,7 @@ export default class UserAddressRepository implements IRepository<UserAddress> {
     create(item: UserAddress): Promise<number>;
     findAll(): Promise<UserAddress[]>;
     findById(id: number): Promise<UserAddress | null>;
-    update(id: number, item: any): Promise<boolean>;
+    update(id: number, item: UserAddress): Promise<boolean>;
     delete(id: number): Promise<boolean>;
     findByUserId(user_id: number): Promise<({
         users: {
@@ -40,10 +40,10 @@ export default class UserAddressRepository implements IRepository<UserAddress> {
         id: number;
         status: number;
         phone: string;
+        is_default: boolean;
         full_name: string;
         address_detail: string;
         address_type: number;
-        is_default: boolean;
         created_at: Date;
         updated_at: Date | null;
         user_id: number;

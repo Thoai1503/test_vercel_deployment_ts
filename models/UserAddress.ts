@@ -87,6 +87,9 @@ export default class UserAddress {
   public getUpdatedAt(): Date {
     return this.updated_at;
   }
+  public setUpdatedAt(date: Date): void {
+    this.updated_at = date;
+  }
 
   public getFullName(): string {
     return this.full_name;

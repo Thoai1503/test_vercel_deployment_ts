@@ -27,6 +27,7 @@ export default class UserAddress {
     getStatus(): number;
     getCreatedDate(): Date;
     getUpdatedAt(): Date;
+    setUpdatedAt(date: Date): void;
     getFullName(): string;
     setFullName(value: string): void;
 }

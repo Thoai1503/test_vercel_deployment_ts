@@ -70,6 +70,9 @@ export default class UserAddress {
     getUpdatedAt() {
         return this.updated_at;
     }
+    setUpdatedAt(date) {
+        this.updated_at = date;
+    }
     getFullName() {
         return this.full_name;
     }
