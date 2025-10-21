@@ -25,6 +25,7 @@ export default class VNPay {
             vnp_OrderType: options.orderType || "other",
             vnp_Amount: Math.round(Number(amount) * 100),
             vnp_ReturnUrl: this.returnUrl,
+            // vnp_BankTranNo: "NCB20170829152730",
             vnp_IpAddr: options.ipAddress || "127.0.0.1",
             vnp_CreateDate: createDate,
         };

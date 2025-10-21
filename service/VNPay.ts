@@ -48,6 +48,7 @@ export default class VNPay implements IPaymentService {
       vnp_OrderType: (options.orderType as string) || "other",
       vnp_Amount: Math.round(Number(amount) * 100),
       vnp_ReturnUrl: this.returnUrl,
+      // vnp_BankTranNo: "NCB20170829152730",
       vnp_IpAddr: (options.ipAddress as string) || "127.0.0.1",
       vnp_CreateDate: createDate,
     };

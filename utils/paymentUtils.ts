@@ -35,3 +35,10 @@ export function hmacSha512(data: string, secret: string): string {
     .update(Buffer.from(data, "utf-8"))
     .digest("hex");
 }
+
+export function parseOrderInfo(string: string) {
+  let decodedInfo = Buffer.from(string, "base64").toString("utf-8").trim();
+  decodedInfo = decodedInfo.replace(/[^\x20-\x7E]+/g, "").trim();
+  console.log("Decoded string:", decodedInfo);
+  return JSON.parse(decodedInfo);
+}

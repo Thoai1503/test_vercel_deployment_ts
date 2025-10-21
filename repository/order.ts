@@ -1,0 +1,37 @@
+import type Order from "../models/Order.js";
+import prisma from "../prisma/client.js";
+import type IRepository from "./IRepository.js";
+
+export default class OrderRepository implements IRepository<Order> {
+  constructor() {}
+  async create(item: Order): Promise<number> {
+    try {
+      const result = await prisma.orders.create({
+        data: {
+          user_id: item.getUserId(),
+          discount: item.getDiscount(),
+          total: item.getTotal(),
+          address_id: item.getAddressId(),
+          created_at: new Date(Date.now()),
+        },
+      });
+
+      return result.id;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findById(id: number): Promise<Order | null> {
+    throw new Error("Method not implemented.");
+  }
+  async findAll(): Promise<Order[]> {
+    throw new Error("Method not implemented.");
+  }
+  async update(id: number, item: any): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+  async delete(id: number): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+}

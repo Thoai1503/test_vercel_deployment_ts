@@ -15,16 +15,6 @@ model EFMigrationsHistory {
   @@map("__EFMigrationsHistory")
 }
 
-model sysdiagrams {
-  name         String @db.NVarChar(128)
-  principal_id Int
-  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61F6A0D706") @default(autoincrement())
-  version      Int?
-  definition   Bytes?
-
-  @@unique([principal_id, name], map: "UK_principal_name")
-}
-
 model attributes {
   id                  Int                   @id(map: "PK_attributes") @default(autoincrement())
   name                String                @db.NVarChar(255)
@@ -111,23 +101,22 @@ model InventoryTransaction {
 }
 
 model order_detail {
-  id         Int @id(map: "PK_order_detail") @default(autoincrement())
+  id         Int    @id(map: "PK_order_detail") @default(autoincrement())
   order_id   Int
   variant_id Int
   quantity   Int
+  orders     orders @relation(fields: [order_id], references: [id], onUpdate: NoAction, map: "FK_order_detail_orders")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model orders {
-  id             Int
+  id             Int             @id(map: "PK_orders") @default(autoincrement())
   user_id        Int
   discount       Decimal         @db.Decimal(18, 0)
   total          Decimal         @db.Decimal(18, 0)
   created_at     DateTime        @default(now(), map: "DF_orders_created_at") @db.DateTime
   address_id     Int?
+  order_detail   order_detail[]
   user_addresses user_addresses? @relation(fields: [address_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_orders_user_addresses")
-
-  @@ignore
 }
 
 model product_attribute {
@@ -189,6 +178,16 @@ model provinces {
   user_addresses user_addresses[]
 }
 
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61F6A0D706") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
 model user_addresses {
   id             Int       @id(map: "PK_user_addresses") @default(autoincrement())
   user_id        Int
@@ -203,7 +202,7 @@ model user_addresses {
   status         Int       @default(1, map: "DF__user_addr__statu__3B40CD36")
   created_at     DateTime  @default(now(), map: "DF__user_addr__creat__3C34F16F") @db.DateTime
   updated_at     DateTime? @db.DateTime
-  orders         orders[]  @ignore
+  orders         orders[]
   districts      districts @relation(fields: [district_id], references: [id], onUpdate: NoAction, map: "FK_user_addresses_districts")
   provinces      provinces @relation(fields: [province_id], references: [id], onUpdate: NoAction, map: "FK_user_addresses_provinces")
   users          users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_user_addresses_users")
