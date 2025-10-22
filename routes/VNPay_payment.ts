@@ -98,7 +98,7 @@ router.get("/vnpay_return", async (req: Request, res: Response) => {
     return res.status(400).json({ code: "97", message: "Invalid signature" });
   } catch (e) {
     console.error("Error verifying VNPAY return:", e);
-    return res.status(500).json({ error: "Payment verification failed" });
+    return res.status(500).json({ error: e });
   }
 });
 router.post("/create_payment_test", async (req: Request, res: Response) => {
