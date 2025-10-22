@@ -1,6 +1,7 @@
 import Cart from "../models/Cart.js";
 import type IRepository from "./IRepository.js";
 import { sql, getPool } from "../db/Mssql.js";
+import prisma from "../prisma/client.js";
 
 export default class CartRepository implements IRepository<Cart> {
   constructor() {}
@@ -31,6 +32,20 @@ export default class CartRepository implements IRepository<Cart> {
   }
   async delete(id: number): Promise<boolean> {
     throw new Error("Method not implemented.");
+  }
+  async deleteByUserId(user_id: number): Promise<boolean> {
+    try {
+      const result = await prisma.cart.deleteMany({
+        where: {
+          user_id: user_id,
+        },
+      });
+      console.log(result.count);
+
+      return true;
+    } catch (error) {
+      throw error;
+    }
   }
   async updateQuantity(id: number, quantity: number): Promise<boolean> {
     try {

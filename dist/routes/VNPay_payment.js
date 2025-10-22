@@ -8,9 +8,11 @@ import OrderRepository from "../repository/order.js";
 import Order from "../models/Order.js";
 import OrderDetailRepository from "../repository/orderDetail.js";
 import OrderDetail from "../models/OrderDetail.js";
+import CartRepository from "../repository/cart.js";
 const router = express.Router();
 const orderRepository = new OrderRepository();
 const orderDetailRepository = new OrderDetailRepository();
+const cartRepository = new CartRepository();
 function getClientIp(req) {
     return (req.headers["x-forwarded-for"] ||
         req.connection.remoteAddress ||
@@ -53,13 +55,18 @@ router.get("/vnpay_return", async (req, res) => {
             const user_id = orderData[0].id;
             const order = new Order(0, user_id, 0, total, address_id);
             const orderId = await orderRepository.create(order);
-            if (orderId && orderId > 0) {
-                await orderData.forEach(async (item) => {
-                    const newOrderDetail = new OrderDetail(0, orderId, item.variant_id, item.quantity);
-                    const re = await orderDetailRepository.create(newOrderDetail);
-                    console.log("Id: " + re);
-                });
+            if (!orderId || orderId <= 0) {
+                return res.status(500).json({ message: "Failed to create order" });
             }
+            const loop = await Promise.all(orderData.map((item) => {
+                const newOrderDetail = new OrderDetail(0, orderId, item.variant_id, item.quantity);
+                return orderDetailRepository.create(newOrderDetail);
+            }));
+            console.log("Loop:" + loop);
+            if (loop.length != orderData.length) {
+                throw new Error("Lỗi cập nhật đơn hàng");
+            }
+            const deleteCart = await cartRepository.deleteByUserId(user_id);
             return res.json({
                 code: String(params?.vnp_ResponseCode ?? ""),
                 orderId: String(params?.vnp_TxnRef ?? ""),
