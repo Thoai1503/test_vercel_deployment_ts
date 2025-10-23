@@ -21,7 +21,7 @@ export default class VNPay {
             vnp_Locale: options.locale === "en" ? "en" : "vn",
             vnp_CurrCode: "VND",
             vnp_TxnRef: orderId,
-            vnp_OrderInfo: options.orderInfo || `Thanh toan don hang: ${orderId}`,
+            vnp_OrderInfo: options.orderInfo,
             vnp_OrderType: options.orderType || "other",
             vnp_Amount: Math.round(Number(amount) * 100),
             vnp_ReturnUrl: this.returnUrl,

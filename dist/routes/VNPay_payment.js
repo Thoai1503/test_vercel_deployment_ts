@@ -9,6 +9,7 @@ import Order from "../models/Order.js";
 import OrderDetailRepository from "../repository/orderDetail.js";
 import OrderDetail from "../models/OrderDetail.js";
 import CartRepository from "../repository/cart.js";
+import prisma from "../prisma/client.js";
 const router = express.Router();
 const orderRepository = new OrderRepository();
 const orderDetailRepository = new OrderDetailRepository();
@@ -49,28 +50,27 @@ router.get("/vnpay_return", async (req, res) => {
         if (verification.isValid) {
             const params = verification.params;
             const orderData = parseOrderInfo(verification.params.vnp_OrderInfo);
-            const total = orderData.reduce((sum, item) => sum + (item?.price || 0) * (item.quantity || 0), 0);
-            const address_id = orderData[1].id;
-            const user_id = orderData[0].id;
+            const address_id = orderData.address_id;
+            const user_id = orderData.user_id;
+            const cartItems = await prisma.cart.findMany({
+                where: { user_id: user_id },
+            });
+            const total = cartItems.reduce((sum, item) => sum + (item?.unit_price || 0) * (item.quantity || 0), 0);
             const order = new Order(0, user_id, 0, total, address_id);
             const orderId = await orderRepository.create(order);
             if (!orderId || orderId <= 0) {
                 return res.status(500).json({ message: "Failed to create order" });
             }
-            const loop = await Promise.all(orderData.map((item) => {
+            const loop = await Promise.all(cartItems.map((item) => {
                 const newOrderDetail = new OrderDetail(0, orderId, item.variant_id, item.quantity);
                 return orderDetailRepository.create(newOrderDetail);
             }));
             console.log("Loop:" + loop);
-            if (loop.length != orderData.length) {
+            if (loop.length == 0) {
                 throw new Error("Lỗi cập nhật đơn hàng");
             }
             const deleteCart = await cartRepository.deleteByUserId(user_id);
-            return res.json({
-                code: String(params?.vnp_ResponseCode ?? ""),
-                orderId: String(params?.vnp_TxnRef ?? ""),
-                amount: String(params?.vnp_Amount ?? ""),
-            });
+            return res.redirect(`http://localhost:5173/successful?id=${params?.vnp_TxnRef}&amount=${params?.vnp_Amount}`);
         }
         return res.status(400).json({ code: "97", message: "Invalid signature" });
     }
@@ -82,9 +82,11 @@ router.get("/vnpay_return", async (req, res) => {
 router.post("/create_payment_test", async (req, res) => {
     const orderId = req.body?.orderId || `${Date.now()}`;
     const amount = req.body?.amount || 100000;
-    const orderInfo = JSON.parse(req.body?.orderInfo);
-    const stringifyInfo = Buffer.from(JSON.stringify(orderInfo)).toString("base64");
-    console.log("info: " + stringifyInfo);
+    let orderInfo = JSON.parse(req.body?.orderInfo);
+    orderInfo = JSON.stringify(orderInfo);
+    const orderInfoBase64 = Buffer.from(orderInfo).toString("base64");
+    const encodedOrderInfo = encodeURIComponent(orderInfoBase64);
+    console.log("info: " + encodedOrderInfo);
     const { method } = req.body;
     switch (method) {
         case "vnpay":
@@ -96,7 +98,7 @@ router.post("/create_payment_test", async (req, res) => {
             });
             const payment = await vnpService.createPayment(orderId, amount, {
                 ipAddress: getClientIp(req),
-                orderInfo: stringifyInfo,
+                orderInfo: encodedOrderInfo,
                 bankCode: req.body?.bankCode,
                 orderType: req.body?.orderType,
                 locale: req.body?.language || "vn",

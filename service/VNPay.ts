@@ -43,8 +43,7 @@ export default class VNPay implements IPaymentService {
       vnp_Locale: (options.locale as string) === "en" ? "en" : "vn",
       vnp_CurrCode: "VND",
       vnp_TxnRef: orderId,
-      vnp_OrderInfo:
-        (options.orderInfo as string) || `Thanh toan don hang: ${orderId}`,
+      vnp_OrderInfo: options.orderInfo as string,
       vnp_OrderType: (options.orderType as string) || "other",
       vnp_Amount: Math.round(Number(amount) * 100),
       vnp_ReturnUrl: this.returnUrl,

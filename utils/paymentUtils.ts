@@ -36,9 +36,33 @@ export function hmacSha512(data: string, secret: string): string {
     .digest("hex");
 }
 
-export function parseOrderInfo(string: string) {
-  let decodedInfo = Buffer.from(string, "base64").toString("utf-8").trim();
-  decodedInfo = decodedInfo.replace(/[^\x20-\x7E]+/g, "").trim();
-  console.log("Decoded string:", decodedInfo);
-  return JSON.parse(decodedInfo);
+export function parseOrderInfo(str: string) {
+  try {
+    // 1️ Decode URL nhiều lần nếu bị double-encoded
+    let restored = str.trim();
+    while (restored.includes("%25")) {
+      restored = decodeURIComponent(restored);
+    }
+    restored = decodeURIComponent(restored);
+
+    // 2️ Loại bỏ ký tự không hợp lệ trong base64
+    restored = restored.replace(/[^A-Za-z0-9+/=]/g, "");
+
+    // 3️ Decode Base64
+    let decodedInfo = Buffer.from(restored, "base64").toString("utf8").trim();
+
+    // 4️ Xoá ký tự lạ không thuộc bảng ASCII chuẩn
+    decodedInfo = decodedInfo.replace(/[^\x20-\x7E]+/g, "").trim();
+
+    // 5️ Tìm JSON hợp lệ trong chuỗi (phòng ngừa dính ký tự dư)
+    const jsonMatch = decodedInfo.match(/\{.*\}/);
+    if (!jsonMatch) throw new Error("No JSON found in decoded string");
+
+    console.log(" Decoded string:", jsonMatch[0]);
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (err) {
+    console.error("❌ Error verifying VNPAY return:", err, str);
+    return null;
+  }
 }

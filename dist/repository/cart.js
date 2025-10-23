@@ -10,7 +10,8 @@ export default class CartRepository {
             request.input("user_id", sql.Int, cart.getUserId());
             request.input("variant_id", sql.Int, cart.getVariantId());
             request.input("quantity", sql.Int, cart.getQuantity());
-            const result = await request.query("INSERT INTO cart (user_id, variant_id, quantity) VALUES (@user_id, @variant_id, @quantity); SELECT SCOPE_IDENTITY() AS id");
+            request.input("unit_price", sql.Decimal, cart.getUnitPrice());
+            const result = await request.query("INSERT INTO cart (user_id, variant_id, quantity,unit_price) VALUES (@user_id, @variant_id, @quantity,@unit_price); SELECT SCOPE_IDENTITY() AS id");
             return result.recordset[0].id;
         }
         catch (error) {
@@ -66,7 +67,7 @@ export default class CartRepository {
             const request = pool.request();
             request.input("user_id", sql.Int, user_id);
             const result = await request.query("select * from cart c join product_variants pv on c.variant_id = pv.id join product_image pim on pim.variant_id= c.variant_id where  c.user_id=@user_id");
-            return result.recordset.map((cart) => new Cart(cart.id, cart.user_id, cart.variant_id, cart.quantity));
+            return result.recordset.map((cart) => new Cart(cart.id, cart.user_id, cart.variant_id, cart.quantity, cart.unit_price));
         }
         catch (error) {
             console.error("Error finding carts by user_id:", error);

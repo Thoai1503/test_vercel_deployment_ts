@@ -3,12 +3,20 @@ export default class Cart {
   private user_id: number;
   private variant_id: number;
   private quantity: number;
+  private unit_price: number;
 
-  constructor(id = 0, user_id = 0, variant_id = 0, quantity = 1) {
+  constructor(
+    id = 0,
+    user_id = 0,
+    variant_id = 0,
+    quantity = 1,
+    unit_price = 0
+  ) {
     this.id = id;
     this.user_id = user_id;
     this.variant_id = variant_id;
     this.quantity = quantity;
+    this.unit_price = unit_price;
   }
   public getId(): number {
     return this.id;
@@ -33,5 +41,11 @@ export default class Cart {
   }
   public setQuantity(quantity: number): void {
     this.quantity = quantity;
+  }
+  public getUnitPrice(): number {
+    return this.unit_price;
+  }
+  public setUnitPrice(quantity: number): void {
+    this.unit_price = quantity;
   }
 }

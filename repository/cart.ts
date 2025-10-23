@@ -12,8 +12,9 @@ export default class CartRepository implements IRepository<Cart> {
       request.input("user_id", sql.Int, cart.getUserId());
       request.input("variant_id", sql.Int, cart.getVariantId());
       request.input("quantity", sql.Int, cart.getQuantity());
+      request.input("unit_price", sql.Decimal, cart.getUnitPrice());
       const result = await request.query(
-        "INSERT INTO cart (user_id, variant_id, quantity) VALUES (@user_id, @variant_id, @quantity); SELECT SCOPE_IDENTITY() AS id"
+        "INSERT INTO cart (user_id, variant_id, quantity,unit_price) VALUES (@user_id, @variant_id, @quantity,@unit_price); SELECT SCOPE_IDENTITY() AS id"
       );
       return result.recordset[0].id;
     } catch (error) {
@@ -33,6 +34,7 @@ export default class CartRepository implements IRepository<Cart> {
   async delete(id: number): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
+
   async deleteByUserId(user_id: number): Promise<boolean> {
     try {
       const result = await prisma.cart.deleteMany({
@@ -76,7 +78,13 @@ export default class CartRepository implements IRepository<Cart> {
       );
       return result.recordset.map(
         (cart: any) =>
-          new Cart(cart.id, cart.user_id, cart.variant_id, cart.quantity)
+          new Cart(
+            cart.id,
+            cart.user_id,
+            cart.variant_id,
+            cart.quantity,
+            cart.unit_price
+          )
       );
     } catch (error) {
       console.error("Error finding carts by user_id:", error);

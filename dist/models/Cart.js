@@ -3,11 +3,13 @@ export default class Cart {
     user_id;
     variant_id;
     quantity;
-    constructor(id = 0, user_id = 0, variant_id = 0, quantity = 1) {
+    unit_price;
+    constructor(id = 0, user_id = 0, variant_id = 0, quantity = 1, unit_price = 0) {
         this.id = id;
         this.user_id = user_id;
         this.variant_id = variant_id;
         this.quantity = quantity;
+        this.unit_price = unit_price;
     }
     getId() {
         return this.id;
@@ -32,6 +34,12 @@ export default class Cart {
     }
     setQuantity(quantity) {
         this.quantity = quantity;
+    }
+    getUnitPrice() {
+        return this.unit_price;
+    }
+    setUnitPrice(quantity) {
+        this.unit_price = quantity;
     }
 }
 //# sourceMappingURL=Cart.js.map

@@ -1,6 +1,7 @@
 import {} from "express";
 import CartRepository from "../repository/cart.js";
 import Cart from "../models/Cart.js";
+import prisma from "../prisma/client.js";
 export default class CartController {
     cartRepository;
     constructor() {
@@ -8,8 +9,8 @@ export default class CartController {
     }
     async addToCart(req, res) {
         try {
-            const { user_id, variant_id, quantity } = req.body;
-            const newCartItem = new Cart(0, user_id, variant_id, quantity);
+            const { user_id, variant_id, quantity, unit_price } = req.body;
+            const newCartItem = new Cart(0, user_id, variant_id, quantity, unit_price);
             const cart = await this.cartRepository.create(newCartItem);
             return res.status(201).json(cart);
         }
@@ -33,7 +34,12 @@ export default class CartController {
         try {
             const cartItemId = parseInt(req.params.id, 10);
             const quantity = parseInt(req.body.quantity, 10);
-            const result = await this.cartRepository.updateQuantity(cartItemId, quantity);
+            let result = false;
+            if (quantity == 0) {
+                result =
+                    (await prisma.cart.delete({ where: { id: cartItemId } })).id != 0;
+            }
+            result = await this.cartRepository.updateQuantity(cartItemId, quantity);
             console.log("update result: " + result);
             return res.status(200).json({ message: result });
         }
