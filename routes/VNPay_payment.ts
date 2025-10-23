@@ -31,23 +31,23 @@ const vnpService = new VNPay({
   returnUrl: process.env.vnp_ReturnUrl,
 });
 
-router.post("/create_payment_url", async (req: Request, res: Response) => {
-  try {
-    const orderId = (req.body?.orderId as string) || `${Date.now()}`;
-    const amount = (req.body?.amount as number) || 100000;
-    const payment = await vnpService.createPayment(orderId, amount, {
-      ipAddress: getClientIp(req),
-      orderInfo: req.body?.orderInfo,
-      bankCode: req.body?.bankCode,
-      orderType: req.body?.orderType,
-      locale: req.body?.language,
-    });
-    return res.status(200).json({ url: payment.paymentUrl });
-  } catch (e) {
-    console.error("Error creating VNPAY url:", e);
-    return res.status(500).json({ error: "Failed to create payment URL" });
-  }
-});
+// router.post("/create_payment_url", async (req: Request, res: Response) => {
+//   try {
+//     const orderId = (req.body?.orderId as string) || `${Date.now()}`;
+//     const amount = (req.body?.amount as number) || 100000;
+//     const payment = await vnpService.createPayment(orderId, amount, {
+//       ipAddress: getClientIp(req),
+//       orderInfo: req.body?.orderInfo,
+//       bankCode: req.body?.bankCode,
+//       orderType: req.body?.orderType,
+//       locale: req.body?.language,
+//     });
+//     return res.status(200).json({ url: payment.paymentUrl });
+//   } catch (e) {
+//     console.error("Error creating VNPAY url:", e);
+//     return res.status(500).json({ error: "Failed to create payment URL" });
+//   }
+// });
 
 router.get("/vnpay_return", async (req: Request, res: Response) => {
   try {
@@ -96,9 +96,9 @@ router.get("/vnpay_return", async (req: Request, res: Response) => {
       });
     }
     return res.status(400).json({ code: "97", message: "Invalid signature" });
-  } catch (e) {
+  } catch (e: any) {
     console.error("Error verifying VNPAY return:", e);
-    return res.status(500).json({ error: e });
+    return res.status(500).json({ error: e.message });
   }
 });
 router.post("/create_payment_test", async (req: Request, res: Response) => {

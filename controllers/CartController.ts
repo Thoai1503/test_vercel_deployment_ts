@@ -14,9 +14,7 @@ export default class CartController {
       const { user_id, variant_id, quantity } = req.body;
       const newCartItem = new Cart(0, user_id, variant_id, quantity);
       const cart = await this.cartRepository.create(newCartItem);
-      return res
-        .status(201)
-        .json({ message: "Item added to cart", cartId: cart });
+      return res.status(201).json(cart);
     } catch (error) {
       console.error("Error adding to cart:", error);
       return res.status(500).json({ error: "Failed to add item to cart" });
