@@ -1,3 +1,4 @@
+import User from "./User.js";
 export default class Order {
     id;
     user_id;
@@ -5,13 +6,15 @@ export default class Order {
     total;
     created_at;
     address_id;
-    constructor(id = 0, user_id = 0, discount = 0, total = 1, address_id = 0, created_at = new Date(Date.now())) {
+    user;
+    constructor(id = 0, user_id = 0, discount = 0, total = 1, address_id = 0, created_at = new Date(Date.now()), user = new User()) {
         this.id = id;
         this.user_id = user_id;
         this.discount = discount;
         this.total = total;
         this.created_at = created_at;
         this.address_id = address_id;
+        this.user = user;
     }
     getId() {
         return this.id;

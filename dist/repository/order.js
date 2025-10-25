@@ -1,4 +1,5 @@
 import Order from "../models/Order.js";
+import User from "../models/User.js";
 import prisma from "../prisma/client.js";
 export default class OrderRepository {
     constructor() { }
@@ -24,8 +25,16 @@ export default class OrderRepository {
     }
     async findAll() {
         try {
-            const list = await prisma.orders.findMany();
-            const mappingList = list.map((item) => new Order(item.id, item.user_id, Number(item.discount), Number(item.total), item.address_id || undefined));
+            const list = await prisma.orders.findMany({ include: { users: true } });
+            const mappingList = list.map((item) => new Order(item.id, item.user_id, Number(item.discount), Number(item.total), item.address_id || undefined, item.created_at, new User({
+                id: item.users.id,
+                name: item.users.full_name,
+                email: item.users.email,
+                phone: item.users.phone,
+                password: "",
+                role: 2,
+                status: item.users.status,
+            })));
             return mappingList;
         }
         catch (error) {

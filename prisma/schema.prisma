@@ -117,6 +117,7 @@ model orders {
   address_id     Int?
   order_detail   order_detail[]
   user_addresses user_addresses? @relation(fields: [address_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_orders_user_addresses")
+  users          users           @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "FK_orders_users")
 }
 
 model product_attribute {
@@ -220,6 +221,7 @@ model users {
   status         Int
   created_at     Unsupported("timestamp")?
   id             Int                       @id(map: "PK__users__3213E83FA25F67D3") @default(autoincrement())
+  orders         orders[]
   user_addresses user_addresses[]
 }
 

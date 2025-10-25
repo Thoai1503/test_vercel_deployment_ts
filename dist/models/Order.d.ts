@@ -1,3 +1,4 @@
+import User from "./User.js";
 export default class Order {
     private id;
     private user_id;
@@ -5,7 +6,8 @@ export default class Order {
     private total;
     private created_at;
     private address_id;
-    constructor(id?: number, user_id?: number, discount?: number, total?: number, address_id?: number, created_at?: Date);
+    private user;
+    constructor(id?: number, user_id?: number, discount?: number, total?: number, address_id?: number, created_at?: Date, user?: User);
     getId(): number;
     setId(id: number): void;
     getUserId(): number;

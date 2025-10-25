@@ -1,4 +1,5 @@
 import Order from "../models/Order.js";
+import User from "../models/User.js";
 import prisma from "../prisma/client.js";
 import type IRepository from "./IRepository.js";
 
@@ -27,7 +28,7 @@ export default class OrderRepository implements IRepository<Order> {
   }
   async findAll(): Promise<Order[]> {
     try {
-      const list = await prisma.orders.findMany();
+      const list = await prisma.orders.findMany({ include: { users: true } });
       const mappingList = list.map(
         (item) =>
           new Order(
@@ -35,7 +36,17 @@ export default class OrderRepository implements IRepository<Order> {
             item.user_id,
             Number(item.discount),
             Number(item.total),
-            item.address_id || undefined
+            item.address_id || undefined,
+            item.created_at,
+            new User({
+              id: item.users.id,
+              name: item.users.full_name,
+              email: item.users.email,
+              phone: item.users.phone,
+              password: "",
+              role: 2,
+              status: item.users.status,
+            })
           )
       );
       return mappingList;
