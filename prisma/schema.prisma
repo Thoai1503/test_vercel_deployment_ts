@@ -114,6 +114,7 @@ model orders {
   discount       Decimal         @db.Decimal(18, 0)
   total          Decimal         @db.Decimal(18, 0)
   created_at     DateTime        @default(now(), map: "DF_orders_created_at") @db.DateTime
+  status         Int             @default(2, map: "DF_orders_status")
   address_id     Int?
   order_detail   order_detail[]
   user_addresses user_addresses? @relation(fields: [address_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_orders_user_addresses")
