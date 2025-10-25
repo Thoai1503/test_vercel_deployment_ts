@@ -8,6 +8,7 @@ export default class Order {
   private created_at: Date;
   private address_id: number;
   private user: User | null;
+  private status: number;
 
   constructor(
     id = 0,
@@ -15,8 +16,10 @@ export default class Order {
     discount = 0,
     total = 1,
     address_id = 0,
+
     created_at = new Date(Date.now()),
-    user = new User()
+    user = new User(),
+    status = 2
   ) {
     this.id = id;
     this.user_id = user_id;
@@ -25,6 +28,7 @@ export default class Order {
     this.created_at = created_at;
     this.address_id = address_id;
     this.user = user;
+    this.status = status;
   }
   public getId(): number {
     return this.id;

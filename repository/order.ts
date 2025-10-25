@@ -48,7 +48,8 @@ export default class OrderRepository implements IRepository<Order> {
               password: "",
               role: 2,
               status: item.users.status,
-            })
+            }),
+            item.status
           )
       );
       return mappingList;
