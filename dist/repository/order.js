@@ -1,3 +1,4 @@
+import Order from "../models/Order.js";
 import prisma from "../prisma/client.js";
 export default class OrderRepository {
     constructor() { }
@@ -22,7 +23,14 @@ export default class OrderRepository {
         throw new Error("Method not implemented.");
     }
     async findAll() {
-        throw new Error("Method not implemented.");
+        try {
+            const list = await prisma.orders.findMany();
+            const mappingList = list.map((item) => new Order(item.id, item.user_id, Number(item.discount), Number(item.total), item.address_id || undefined));
+            return mappingList;
+        }
+        catch (error) {
+            throw error;
+        }
     }
     async update(id, item) {
         throw new Error("Method not implemented.");

@@ -64,10 +64,10 @@ export default class AuthController {
         }
     };
     register = async (req, res, next) => {
-        const { name, email, phone, password } = req.body;
+        const { name, email, password, repeated_password } = req.body;
         try {
             // Input validation
-            if (!name || !email || !phone || !password) {
+            if (!name || !email || !password) {
                 return res.status(400).json({
                     success: false,
                     message: "All fields are required",
@@ -84,14 +84,14 @@ export default class AuthController {
                 });
             }
             // Phone format validation
-            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-            if (!phoneRegex.test(phone)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid phone number format",
-                    code: "INVALID_PHONE",
-                });
-            }
+            // const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            // if (!phoneRegex.test(phone)) {
+            //   return res.status(400).json({
+            //     success: false,
+            //     message: "Invalid phone number format",
+            //     code: "INVALID_PHONE",
+            //   });
+            // }
             // Password validation
             const passwordValidation = this.passwordService.validatePassword(password);
             if (!passwordValidation.isValid) {
@@ -116,7 +116,7 @@ export default class AuthController {
                 id: 0,
                 name,
                 email,
-                phone,
+                phone: "034354",
                 password,
                 role: 0,
                 status: 0,

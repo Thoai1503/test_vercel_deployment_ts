@@ -1,4 +1,4 @@
-import type Order from "../models/Order.js";
+import Order from "../models/Order.js";
 import prisma from "../prisma/client.js";
 import type IRepository from "./IRepository.js";
 
@@ -26,7 +26,22 @@ export default class OrderRepository implements IRepository<Order> {
     throw new Error("Method not implemented.");
   }
   async findAll(): Promise<Order[]> {
-    throw new Error("Method not implemented.");
+    try {
+      const list = await prisma.orders.findMany();
+      const mappingList = list.map(
+        (item) =>
+          new Order(
+            item.id,
+            item.user_id,
+            Number(item.discount),
+            Number(item.total),
+            item.address_id || undefined
+          )
+      );
+      return mappingList;
+    } catch (error) {
+      throw error;
+    }
   }
   async update(id: number, item: any): Promise<boolean> {
     throw new Error("Method not implemented.");

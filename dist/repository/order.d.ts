@@ -1,4 +1,4 @@
-import type Order from "../models/Order.js";
+import Order from "../models/Order.js";
 import type IRepository from "./IRepository.js";
 export default class OrderRepository implements IRepository<Order> {
     constructor();
