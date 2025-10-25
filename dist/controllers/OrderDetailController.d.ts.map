@@ -1,0 +1,1 @@
+{"version":3,"file":"OrderDetailController.d.ts","sourceRoot":"","sources":["../../controllers/OrderDetailController.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,KAAK,OAAO,EAAE,KAAK,QAAQ,EAAE,MAAM,SAAS,CAAC;AAEtD,MAAM,CAAC,OAAO,OAAO,qBAAqB;IACxC,OAAO,CAAC,qBAAqB,CAAwB;;IAK/C,WAAW,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,GAAG,OAAO,CAAC,QAAQ,CAAC;CAQlE"}

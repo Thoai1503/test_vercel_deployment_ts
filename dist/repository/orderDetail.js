@@ -1,3 +1,4 @@
+import OrderDetail from "../models/OrderDetail.js";
 import prisma from "../prisma/client.js";
 export default class OrderDetailRepository {
     async create(item) {
@@ -26,6 +27,20 @@ export default class OrderDetailRepository {
     }
     delete(id) {
         throw new Error("Method not implemented.");
+    }
+    async findByOrderId(order_id) {
+        try {
+            const list = await prisma.order_detail.findMany({
+                include: {},
+                where: {
+                    order_id: order_id,
+                },
+            });
+            return list.map((item) => new OrderDetail(item.id, item.order_id, item.variant_id, item.quantity));
+        }
+        catch (error) {
+            throw error;
+        }
     }
 }
 //# sourceMappingURL=orderDetail.js.map

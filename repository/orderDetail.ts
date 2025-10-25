@@ -1,4 +1,4 @@
-import type OrderDetail from "../models/OrderDetail.js";
+import OrderDetail from "../models/OrderDetail.js";
 import prisma from "../prisma/client.js";
 import type IRepository from "./IRepository.js";
 
@@ -28,5 +28,26 @@ export default class OrderDetailRepository implements IRepository<OrderDetail> {
   }
   delete(id: number): Promise<boolean> {
     throw new Error("Method not implemented.");
+  }
+  async findByOrderId(order_id: number): Promise<OrderDetail[]> {
+    try {
+      const list = await prisma.order_detail.findMany({
+        include: {},
+        where: {
+          order_id: order_id,
+        },
+      });
+      return list.map(
+        (item) =>
+          new OrderDetail(
+            item.id,
+            item.order_id,
+            item.variant_id,
+            item.quantity
+          )
+      );
+    } catch (error) {
+      throw error;
+    }
   }
 }

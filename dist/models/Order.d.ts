@@ -7,7 +7,8 @@ export default class Order {
     private created_at;
     private address_id;
     private user;
-    constructor(id?: number, user_id?: number, discount?: number, total?: number, address_id?: number, created_at?: Date, user?: User);
+    private status;
+    constructor(id?: number, user_id?: number, discount?: number, total?: number, address_id?: number, created_at?: Date, user?: User, status?: number);
     getId(): number;
     setId(id: number): void;
     getUserId(): number;

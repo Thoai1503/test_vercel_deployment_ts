@@ -7,7 +7,8 @@ export default class Order {
     created_at;
     address_id;
     user;
-    constructor(id = 0, user_id = 0, discount = 0, total = 1, address_id = 0, created_at = new Date(Date.now()), user = new User()) {
+    status;
+    constructor(id = 0, user_id = 0, discount = 0, total = 1, address_id = 0, created_at = new Date(Date.now()), user = new User(), status = 2) {
         this.id = id;
         this.user_id = user_id;
         this.discount = discount;
@@ -15,6 +16,7 @@ export default class Order {
         this.created_at = created_at;
         this.address_id = address_id;
         this.user = user;
+        this.status = status;
     }
     getId() {
         return this.id;

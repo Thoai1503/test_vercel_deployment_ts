@@ -36,7 +36,7 @@ export default class OrderRepository {
                 password: "",
                 role: 2,
                 status: item.users.status,
-            })));
+            }), item.status));
             return mappingList;
         }
         catch (error) {
