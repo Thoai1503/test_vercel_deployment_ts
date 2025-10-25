@@ -28,7 +28,9 @@ export default class OrderRepository implements IRepository<Order> {
   }
   async findAll(): Promise<Order[]> {
     try {
-      const list = await prisma.orders.findMany({ include: { users: true } });
+      const list = await prisma.orders.findMany({
+        include: { users: true, order_detail: false, user_addresses: true },
+      });
       const mappingList = list.map(
         (item) =>
           new Order(

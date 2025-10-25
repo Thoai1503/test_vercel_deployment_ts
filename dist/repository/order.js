@@ -25,7 +25,9 @@ export default class OrderRepository {
     }
     async findAll() {
         try {
-            const list = await prisma.orders.findMany({ include: { users: true } });
+            const list = await prisma.orders.findMany({
+                include: { users: true, order_detail: false, user_addresses: true },
+            });
             const mappingList = list.map((item) => new Order(item.id, item.user_id, Number(item.discount), Number(item.total), item.address_id || undefined, item.created_at, new User({
                 id: item.users.id,
                 name: item.users.full_name,
