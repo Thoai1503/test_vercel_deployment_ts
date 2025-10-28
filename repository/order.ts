@@ -30,6 +30,9 @@ export default class OrderRepository implements IRepository<Order> {
     try {
       const list = await prisma.orders.findMany({
         include: { users: true, order_detail: false, user_addresses: true },
+        orderBy: {
+          created_at: "desc",
+        },
       });
       const mappingList = list.map(
         (item) =>

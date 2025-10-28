@@ -60,4 +60,7 @@ export default class Order {
   public setAddressId(address_id: number): void {
     this.address_id = address_id;
   }
+  public getUser(): User | null {
+    return this.user;
+  }
 }

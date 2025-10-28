@@ -49,7 +49,9 @@ router.get("/vnpay_return", async (req, res) => {
         const verification = await vnpService.returnPayment(req.query);
         if (verification.isValid) {
             const params = verification.params;
+            //parse dữ liệu JSON nhận từ   vnp_OrderInfo
             const orderData = parseOrderInfo(verification.params.vnp_OrderInfo);
+            // lấy dữ liệu sau khi parse để tiến hành lưu vào db sau khi khách đã thanh toán
             const address_id = orderData.address_id;
             const user_id = orderData.user_id;
             const cartItems = await prisma.cart.findMany({

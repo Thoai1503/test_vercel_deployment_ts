@@ -19,5 +19,6 @@ export default class Order {
     setTotal(total: number): void;
     getAddressId(): number;
     setAddressId(address_id: number): void;
+    getUser(): User | null;
 }
 //# sourceMappingURL=Order.d.ts.map

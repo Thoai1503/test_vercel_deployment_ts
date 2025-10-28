@@ -48,5 +48,8 @@ export default class Order {
     setAddressId(address_id) {
         this.address_id = address_id;
     }
+    getUser() {
+        return this.user;
+    }
 }
 //# sourceMappingURL=Order.js.map

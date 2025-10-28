@@ -9,8 +9,30 @@ export default class OrderController {
   }
 
   async getAllOrder(req: Request, res: Response): Promise<Response> {
-    const list = await this.orderRepository.findAll();
+    const { page, search } = req.query;
+    const searchStr = typeof search === "string" ? search.trim() : "";
+    const limit = 8; // Items per page
+    const start = (Number(page) - 1) * limit;
 
-    return res.status(200).json(list);
+    const end = start + limit;
+
+    let list = await this.orderRepository.findAll();
+    console.log(
+      "phones=",
+      list.map((i) => i.getUser()?.getPhone())
+    );
+    if (search != "") {
+      list = list.filter((item) => {
+        const phone = (item.getUser()?.getPhone() || "").trim();
+        return phone.includes(searchStr);
+      });
+    }
+    const count = list.length;
+    const totalPages = Math.ceil(count / limit);
+    list = list.slice(start, end);
+
+    return res
+      .status(200)
+      .json({ list, page: Number(page), totalPages: totalPages });
   }
 }
