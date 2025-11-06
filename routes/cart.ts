@@ -10,6 +10,6 @@ router
   .route("/user/:user_id")
   .get(cartController.getCartByUserId.bind(cartController));
 
-router.route("/:id").patch(cartController.updateQuantity.bind(cartController));
+router.put("/:id", cartController.updateQuantity.bind(cartController));
 
 export default router;
