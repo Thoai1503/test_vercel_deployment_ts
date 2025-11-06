@@ -32,7 +32,17 @@ export default class CartRepository implements IRepository<Cart> {
     throw new Error("Method not implemented.");
   }
   async delete(id: number): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    try {
+      const result = await prisma.cart.delete({
+        where: {
+          id: id,
+        },
+      });
+      console.log(result);
+      return result.id != 0;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async deleteByUserId(user_id: number): Promise<boolean> {
