@@ -76,6 +76,7 @@ export default class CartRepository implements IRepository<Cart> {
       const result = await request.query(
         "select * from cart c join product_variants pv on c.variant_id = pv.id join product_image pim on pim.variant_id= c.variant_id where  c.user_id=@user_id"
       );
+
       return result.recordset.map(
         (cart: any) =>
           new Cart(

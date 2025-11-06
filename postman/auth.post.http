@@ -1,0 +1,6 @@
+
+GET http://localhost:5000/api/v1/order-detail/order/24
+
+
+
+//POST http://localhost:5000/api/v1/order-detail/order/24

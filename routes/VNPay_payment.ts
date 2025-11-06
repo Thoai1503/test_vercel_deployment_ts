@@ -72,6 +72,7 @@ router.get("/vnpay_return", async (req: Request, res: Response) => {
           sum + (item?.unit_price || 0) * (item.quantity || 0),
         0
       );
+
       const order = new Order(0, user_id, 0, total, address_id);
       const orderId = await orderRepository.create(order);
       if (!orderId || orderId <= 0) {
@@ -112,7 +113,6 @@ router.post("/create_payment_test", async (req: Request, res: Response) => {
   orderInfo = JSON.stringify(orderInfo);
   const orderInfoBase64 = Buffer.from(orderInfo).toString("base64");
   const encodedOrderInfo = encodeURIComponent(orderInfoBase64);
-  console.log("info: " + encodedOrderInfo);
   const { method } = req.body;
   switch (method) {
     case "vnpay":

@@ -60,4 +60,31 @@ export default class CartController {
       return res.status(500).json({ error: "Failed to retrieve cart items" });
     }
   }
+
+  async addListToCart(
+    req: Request,
+    res: Response
+  ): Promise<Response<any, Record<string, any>>> {
+    try {
+      const { user_id, items } = req.body;
+      const promiseArr = [];
+      for (const item of items) {
+        const newCartItem = new Cart(
+          0,
+          user_id,
+          item.variant_id,
+          item.quantity,
+          item.unit_price
+        );
+
+        promiseArr.push(this.cartRepository.create(newCartItem));
+      }
+      await Promise.all(promiseArr);
+
+      return res.status(201).json({ message: "Items added to cart" });
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      return res.status(500).json({ error: "Failed to add items to cart" });
+    }
+  }
 }

@@ -3,9 +3,10 @@ import CartController from "../controllers/CartController.js";
 const router = express.Router();
 const cartController = new CartController();
 router.route("/").post(cartController.addToCart.bind(cartController));
+router.route("/batch").post(cartController.addListToCart.bind(cartController));
 router
     .route("/user/:user_id")
     .get(cartController.getCartByUserId.bind(cartController));
-router.route("/:id").post(cartController.updateQuantity.bind(cartController));
+router.route("/:id").patch(cartController.updateQuantity.bind(cartController));
 export default router;
 //# sourceMappingURL=cart.js.map

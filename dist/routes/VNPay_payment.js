@@ -88,7 +88,6 @@ router.post("/create_payment_test", async (req, res) => {
     orderInfo = JSON.stringify(orderInfo);
     const orderInfoBase64 = Buffer.from(orderInfo).toString("base64");
     const encodedOrderInfo = encodeURIComponent(orderInfoBase64);
-    console.log("info: " + encodedOrderInfo);
     const { method } = req.body;
     switch (method) {
         case "vnpay":
