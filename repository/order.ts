@@ -66,4 +66,23 @@ export default class OrderRepository implements IRepository<Order> {
   async delete(id: number): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
+  async getByUserId(user_id: number): Promise<Order[]> {
+    try {
+      const list = await prisma.orders.findMany({
+        where: { user_id: user_id },
+      });
+      return list.map(
+        (item) =>
+          new Order(
+            item.id,
+            user_id,
+            Number(item.discount),
+            Number(item.total),
+            item.address_id!
+          )
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
 }

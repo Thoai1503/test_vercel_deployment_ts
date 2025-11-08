@@ -64,5 +64,16 @@ export default class CartController {
             return res.status(500).json({ error: "Failed to add items to cart" });
         }
     }
+    async clearCart(req, res) {
+        try {
+            const userId = parseInt(req.params.user_id, 10);
+            const result = await this.cartRepository.deleteByUserId(userId);
+            return res.status(200).json({ message: result });
+        }
+        catch (error) {
+            console.error("Error clearing cart items:", error);
+            return res.status(500).json({ error: "Failed to clear cart items" });
+        }
+    }
 }
 //# sourceMappingURL=CartController.js.map

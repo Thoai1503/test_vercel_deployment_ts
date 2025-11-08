@@ -50,11 +50,12 @@ const vnpService = new VNPay({
 //     return res.status(500).json({ error: "Failed to create payment URL" });
 //   }
 // });
-
-router.get("/vnpay_return", async (req: Request, res: Response) => {
-  try {
-    const verification = await vnpService.returnPayment(req.query as any);
-    if (verification.isValid) {
+const successfulVNPaymentResponse = async (
+  verification: { isValid: boolean; params: Record<string, unknown> },
+  res: Response
+) => {
+  if (verification.isValid) {
+    try {
       const params = verification.params as Record<string, unknown> | undefined;
 
       //parse dữ liệu JSON nhận từ   vnp_OrderInfo
@@ -95,10 +96,39 @@ router.get("/vnpay_return", async (req: Request, res: Response) => {
         throw new Error("Lỗi cập nhật đơn hàng");
       }
       const deleteCart = await cartRepository.deleteByUserId(user_id);
-
       return res.redirect(
-        `http://localhost:5173/successful?id=${params?.vnp_TxnRef}&amount=${params?.vnp_Amount}`
+        `https://electric-commercial.vercel.app/successful?id=${params?.vnp_TxnRef}&amount=${params?.vnp_Amount}`
       );
+    } catch (e) {
+      console.error("Error processing successful payment redirect:", e);
+      return res
+        .status(500)
+        .json({ error: "Failed to process successful payment" });
+    }
+  }
+  return res.status(400).json({ code: "97", message: "Invalid signature" });
+};
+
+const failedVNPaymentResponse = async (
+  verification: { isValid: boolean; params: Record<string, unknown> },
+  res: Response
+) => {
+  const orderData = parseOrderInfo(verification.params.vnp_OrderInfo as string);
+  const user_id = orderData.user_id;
+
+  const deleteCart = await cartRepository.deleteByUserId(user_id);
+
+  return res.redirect(`https://electric-commercial.vercel.app/failed`);
+};
+
+router.get("/vnpay_return", async (req: Request, res: Response) => {
+  try {
+    const verification = await vnpService.returnPayment(req.query as any);
+    if (verification.isValid) {
+      if (verification.params.vnp_ResponseCode === "00") {
+        return successfulVNPaymentResponse(verification, res);
+      }
+      return failedVNPaymentResponse(verification, res);
     }
     return res.status(400).json({ code: "97", message: "Invalid signature" });
   } catch (e: any) {

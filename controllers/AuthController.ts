@@ -151,6 +151,7 @@ export default class AuthController {
       next(error);
     }
   };
+
   sendTokenResponse = (user: User, statusCode: number, res: any) => {
     const tokens = user.generateAuthToken();
 

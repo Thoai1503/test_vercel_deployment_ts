@@ -52,5 +52,16 @@ export default class OrderRepository {
     async delete(id) {
         throw new Error("Method not implemented.");
     }
+    async getByUserId(user_id) {
+        try {
+            const list = await prisma.orders.findMany({
+                where: { user_id: user_id },
+            });
+            return list.map((item) => new Order(item.id, user_id, Number(item.discount), Number(item.total), item.address_id));
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 }
 //# sourceMappingURL=order.js.map

@@ -6,5 +6,6 @@ export default class CartController {
     getCartByUserId(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     updateQuantity(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
     addListToCart(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    clearCart(req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
 }
 //# sourceMappingURL=CartController.d.ts.map

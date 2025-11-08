@@ -7,5 +7,6 @@ export default class OrderRepository implements IRepository<Order> {
     findAll(): Promise<Order[]>;
     update(id: number, item: any): Promise<boolean>;
     delete(id: number): Promise<boolean>;
+    getByUserId(user_id: number): Promise<Order[]>;
 }
 //# sourceMappingURL=order.d.ts.map
