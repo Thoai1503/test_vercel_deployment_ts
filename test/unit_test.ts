@@ -9,6 +9,7 @@ const orderRepository = new OrderRepository();
 const userAddressRepository = new UserAddressRepository();
 const list = await districtRepository.getByProvinceId(1);
 const wards = await wardRepository.getByDistrictId(3);
+const order = await orderRepository.getByUserId(2);
 const ua = new UserAddress(
   0,
   2,
@@ -28,4 +29,4 @@ const orders = await orderRepository.findAll();
 const create = await userAddressRepository.create(ua);
 const userAddress = await userAddressRepository.findByUserId(2);
 
-console.log("List: " + JSON.stringify(orders));
+console.log("List: " + JSON.stringify(order));

@@ -26,5 +26,10 @@ export default class OrderController {
             .status(200)
             .json({ list, page: Number(page), totalPages: totalPages });
     }
+    async getByUserId(req, res) {
+        const { user_id } = req.params;
+        const list = await this.orderRepository.getByUserId(Number(user_id));
+        return res.status(200).json(list);
+    }
 }
 //# sourceMappingURL=OrderController.js.map
