@@ -57,7 +57,10 @@ export default class OrderRepository {
             const list = await prisma.orders.findMany({
                 where: { user_id: user_id },
             });
-            return list.map((item) => new Order(item.id, user_id, Number(item.discount), Number(item.total), item.address_id));
+            return list.map((item) => {
+                const user = new User();
+                return new Order(item.id, user_id, Number(item.discount), Number(item.total), item.address_id, item.created_at, user, item.status);
+            });
         }
         catch (error) {
             throw error;
