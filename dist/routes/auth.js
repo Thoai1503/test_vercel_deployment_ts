@@ -12,7 +12,7 @@ router.post("/login", authMiddleware.logAuthAttempt, authController.login);
 router.post("/register", authMiddleware.logAuthAttempt, authController.register);
 router.post("/refresh_token", authMiddleware.validateRefreshToken, authController.refreshToken);
 // Protected routes
-router.post("/logout", authMiddleware.authenticateToken, authController.logout);
+router.post("/logout", authController.logout);
 router.get("/profile", authMiddleware.authenticateToken, authController.getProfile);
 export default router;
 //# sourceMappingURL=auth.js.map

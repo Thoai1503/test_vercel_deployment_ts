@@ -25,7 +25,7 @@ router.post(
 );
 
 // Protected routes
-router.post("/logout", authMiddleware.authenticateToken, authController.logout);
+router.post("/logout", authController.logout);
 router.get(
   "/profile",
   authMiddleware.authenticateToken,
