@@ -16,19 +16,19 @@ export default class Order {
     discount = 0,
     total = 1,
     address_id = 0,
+    status = 2,
 
     created_at = new Date(Date.now()),
-    user = new User(),
-    status = 2
+    user = new User()
   ) {
     this.id = id;
     this.user_id = user_id;
     this.discount = discount;
     this.total = total;
-    this.created_at = created_at;
     this.address_id = address_id;
     this.user = user;
     this.status = status;
+    this.created_at = created_at;
   }
   public getId(): number {
     return this.id;
@@ -62,5 +62,11 @@ export default class Order {
   }
   public getUser(): User | null {
     return this.user;
+  }
+  public getStatus() {
+    return this.status;
+  }
+  public setStatus(status: number): void {
+    this.status = status;
   }
 }

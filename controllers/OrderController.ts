@@ -1,4 +1,5 @@
 import type Order from "../models/Order.js";
+import prisma from "../prisma/client.js";
 import OrderRepository from "../repository/order.js";
 import { type Request, type Response } from "express";
 
@@ -40,5 +41,8 @@ export default class OrderController {
     const { user_id } = req.params;
     const list = await this.orderRepository.getByUserId(Number(user_id!));
     return res.status(200).json(list);
+  }
+  async createOrder(req: Request, res: Response): Promise<any> {
+    // const result = await this.orderRepository.create;
   }
 }

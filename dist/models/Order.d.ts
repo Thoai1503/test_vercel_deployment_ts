@@ -8,7 +8,7 @@ export default class Order {
     private address_id;
     private user;
     private status;
-    constructor(id?: number, user_id?: number, discount?: number, total?: number, address_id?: number, created_at?: Date, user?: User, status?: number);
+    constructor(id?: number, user_id?: number, discount?: number, total?: number, address_id?: number, status?: number, created_at?: Date, user?: User);
     getId(): number;
     setId(id: number): void;
     getUserId(): number;
@@ -20,5 +20,7 @@ export default class Order {
     getAddressId(): number;
     setAddressId(address_id: number): void;
     getUser(): User | null;
+    getStatus(): number;
+    setStatus(status: number): void;
 }
 //# sourceMappingURL=Order.d.ts.map

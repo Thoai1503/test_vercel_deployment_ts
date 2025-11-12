@@ -1,3 +1,4 @@
+import prisma from "../prisma/client.js";
 import OrderRepository from "../repository/order.js";
 import {} from "express";
 export default class OrderController {
@@ -30,6 +31,9 @@ export default class OrderController {
         const { user_id } = req.params;
         const list = await this.orderRepository.getByUserId(Number(user_id));
         return res.status(200).json(list);
+    }
+    async createOrder(req, res) {
+        // const result = await this.orderRepository.create;
     }
 }
 //# sourceMappingURL=OrderController.js.map

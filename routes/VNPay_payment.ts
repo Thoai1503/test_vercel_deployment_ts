@@ -62,40 +62,47 @@ const successfulVNPaymentResponse = async (
       const orderData = parseOrderInfo(
         verification.params.vnp_OrderInfo as string
       );
+
       // lấy dữ liệu sau khi parse để tiến hành lưu vào db sau khi khách đã thanh toán
-      const address_id = orderData.address_id;
+
       const user_id = orderData.user_id;
-      const cartItems = await prisma.cart.findMany({
-        where: { user_id: user_id },
-      });
-      const total = cartItems.reduce(
-        (sum: number, item: any) =>
-          sum + (item?.unit_price || 0) * (item.quantity || 0),
-        0
+      const pendingOrder = await orderRepository.getPendingByUserId(user_id);
+      pendingOrder.setStatus(2);
+      const update = await orderRepository.update(
+        pendingOrder.getId(),
+        pendingOrder
       );
+      // const cartItems = await prisma.cart.findMany({
+      //   where: { user_id: user_id },
+      // });
+      // const total = cartItems.reduce(
+      //   (sum: number, item: any) =>
+      //     sum  + (item?.unit_price || 0) * (item.quantity || 0),
+      //   0
+      // );
 
-      const order = new Order(0, user_id, 0, total, address_id);
-      const orderId = await orderRepository.create(order);
-      if (!orderId || orderId <= 0) {
-        return res.status(500).json({ message: "Failed to create order" });
-      }
+      //  const order = new Order(0, user_id, 0, total, address_id, 2);
+      // const orderId = await orderRepository.create(order);
+      // if (!orderId || orderId <= 0) {
+      //   return res.status(500).json({ message: "Failed to create order" });
+      // }
 
-      const loop = await Promise.all(
-        cartItems.map((item) => {
-          const newOrderDetail = new OrderDetail(
-            0,
-            orderId,
-            item.variant_id,
-            item.quantity
-          );
-          return orderDetailRepository.create(newOrderDetail);
-        })
-      );
-      console.log("Loop:" + loop);
-      if (loop.length == 0) {
-        throw new Error("Lỗi cập nhật đơn hàng");
-      }
-      const deleteCart = await cartRepository.deleteByUserId(user_id);
+      // const loop = await Promise.all(
+      //   cartItems.map((item) => {
+      //     const newOrderDetail = new OrderDetail(
+      //       0,
+      //       orderId,
+      //       item.variant_id,
+      //       item.quantity
+      //     );
+      //     return orderDetailRepository.create(newOrderDetail);
+      //   })
+      // );
+      // console.log("Loop:" + loop);
+      // if (loop.length == 0) {
+      //   throw new Error("Lỗi cập nhật đơn hàng");
+      // }
+      // const deleteCart = await cartRepository.deleteByUserId(user_id);
       return res.redirect(
         `https://electric-commercial.vercel.app/successful?id=${params?.vnp_TxnRef}&amount=${params?.vnp_Amount}`
       );
@@ -124,6 +131,7 @@ const failedVNPaymentResponse = async (
 router.get("/vnpay_return", async (req: Request, res: Response) => {
   try {
     const verification = await vnpService.returnPayment(req.query as any);
+
     if (verification.isValid) {
       if (verification.params.vnp_ResponseCode === "00") {
         return successfulVNPaymentResponse(verification, res);
@@ -137,12 +145,53 @@ router.get("/vnpay_return", async (req: Request, res: Response) => {
   }
 });
 router.post("/create_payment_test", async (req: Request, res: Response) => {
+  //order payload
   const orderId = (req.body?.orderId as string) || `${Date.now()}`;
+  const userId = req.body?.user_id as number;
   const amount = (req.body?.amount as number) || 100000;
+  const address_id = Number(req.body.address_id);
   let orderInfo = JSON.parse(req.body?.orderInfo);
   orderInfo = JSON.stringify(orderInfo);
+  // end payload
+
+  const cartItems = await prisma.cart.findMany({
+    where: { user_id: userId },
+  });
+  const total = cartItems.reduce(
+    (sum: number, item: any) =>
+      sum + (item?.unit_price || 0) * (item.quantity || 0),
+    0
+  );
+  const deleteCart = await cartRepository.deleteByUserId(userId);
+
+  const order_id = await orderRepository.create(
+    new Order(0, userId, 0, amount, address_id, 1)
+  );
   const orderInfoBase64 = Buffer.from(orderInfo).toString("base64");
   const encodedOrderInfo = encodeURIComponent(orderInfoBase64);
+
+  if (!order_id) {
+    return res.status(404).json({
+      success: false,
+      message: "Lỗi tạo đơn hàng không thành công",
+    });
+  }
+  const loop = await Promise.all(
+    cartItems.map((item) => {
+      const newOrderDetail = new OrderDetail(
+        0,
+        order_id,
+        item.variant_id,
+        item.quantity
+      );
+      return orderDetailRepository.create(newOrderDetail);
+    })
+  );
+
+  if (loop.length == 0) {
+    throw new Error("Lỗi cập nhật đơn hàng");
+  }
+
   const { method } = req.body;
   switch (method) {
     case "vnpay":

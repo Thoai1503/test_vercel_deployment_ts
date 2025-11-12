@@ -2,6 +2,7 @@ import Order from "../models/Order.js";
 import User from "../models/User.js";
 import prisma from "../prisma/client.js";
 import type IRepository from "./IRepository.js";
+import { sql, getPool } from "../db/Mssql.js";
 
 export default class OrderRepository implements IRepository<Order> {
   constructor() {}
@@ -14,6 +15,7 @@ export default class OrderRepository implements IRepository<Order> {
           total: item.getTotal(),
           address_id: item.getAddressId(),
           created_at: new Date(Date.now()),
+          status: 1,
         },
       });
 
@@ -42,6 +44,7 @@ export default class OrderRepository implements IRepository<Order> {
             Number(item.discount),
             Number(item.total),
             item.address_id || undefined,
+            item.status,
             item.created_at,
             new User({
               id: item.users.id,
@@ -51,8 +54,7 @@ export default class OrderRepository implements IRepository<Order> {
               password: "",
               role: 2,
               status: item.users.status,
-            }),
-            item.status
+            })
           )
       );
       return mappingList;
@@ -60,8 +62,18 @@ export default class OrderRepository implements IRepository<Order> {
       throw error;
     }
   }
-  async update(id: number, item: any): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async update(id: number, item: Order): Promise<boolean> {
+    try {
+      const re = await prisma.orders.update({
+        where: { id: id },
+        data: {
+          status: item.getStatus(),
+        },
+      });
+      return true;
+    } catch (error) {
+      throw error;
+    }
   }
   async delete(id: number): Promise<boolean> {
     throw new Error("Method not implemented.");
@@ -79,11 +91,32 @@ export default class OrderRepository implements IRepository<Order> {
           Number(item.discount),
           Number(item.total),
           item.address_id!,
+          item.status,
           item.created_at,
-          user,
-          item.status
+          user
         );
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getPendingByUserId(user_id: number): Promise<Order> {
+    try {
+      const en = await prisma.orders.findFirst({
+        where: { user_id: user_id, status: 1 },
+      });
+      const user = new User();
+
+      return new Order(
+        en?.id,
+        user_id,
+        Number(en?.discount),
+        Number(en?.total),
+        en?.address_id!,
+        en?.status,
+        en?.created_at,
+        user
+      );
     } catch (error) {
       throw error;
     }
