@@ -1,6 +1,6 @@
 
-GET http://localhost:5000/api/v1/order/user/2
+//GET http://localhost:5000/api/v1/order/user/2
 
 
 
-//POST http://localhost:5000/api/v1/order-detail/order/24
+GET http://localhost:8000/Thoai-pro-spring/home/

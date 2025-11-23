@@ -53,37 +53,8 @@ const successfulVNPaymentResponse = async (verification, res) => {
             // lấy dữ liệu sau khi parse để tiến hành lưu vào db sau khi khách đã thanh toán
             const user_id = orderData.user_id;
             const pendingOrder = await orderRepository.getPendingByUserId(user_id);
-            pendingOrder.setStatus(2);
+            pendingOrder.setStatus(2); // paid ---> status ==2
             const update = await orderRepository.update(pendingOrder.getId(), pendingOrder);
-            // const cartItems = await prisma.cart.findMany({
-            //   where: { user_id: user_id },
-            // });
-            // const total = cartItems.reduce(
-            //   (sum: number, item: any) =>
-            //     sum  + (item?.unit_price || 0) * (item.quantity || 0),
-            //   0
-            // );
-            //  const order = new Order(0, user_id, 0, total, address_id, 2);
-            // const orderId = await orderRepository.create(order);
-            // if (!orderId || orderId <= 0) {
-            //   return res.status(500).json({ message: "Failed to create order" });
-            // }
-            // const loop = await Promise.all(
-            //   cartItems.map((item) => {
-            //     const newOrderDetail = new OrderDetail(
-            //       0,
-            //       orderId,
-            //       item.variant_id,
-            //       item.quantity
-            //     );
-            //     return orderDetailRepository.create(newOrderDetail);
-            //   })
-            // );
-            // console.log("Loop:" + loop);
-            // if (loop.length == 0) {
-            //   throw new Error("Lỗi cập nhật đơn hàng");
-            // }
-            // const deleteCart = await cartRepository.deleteByUserId(user_id);
             return res.redirect(`https://electric-commercial.vercel.app/successful?id=${params?.vnp_TxnRef}&amount=${params?.vnp_Amount}`);
         }
         catch (e) {

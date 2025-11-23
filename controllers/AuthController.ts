@@ -243,13 +243,10 @@ export default class AuthController {
         })
         .json({
           success: true,
-
           id: user.getId(),
           name: user.getName(),
           email: user.getEmail(),
-
           role: user.getRole(),
-
           accessToken: newTokens.accessToken,
           refreshToken: newTokens.refreshToken,
           expiresIn: newTokens.expiresIn,

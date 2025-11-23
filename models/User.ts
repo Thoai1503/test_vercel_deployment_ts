@@ -126,15 +126,10 @@ export default class User {
   }
 
   async comparePassword(plain: string): Promise<boolean> {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // const bcrypt = require("bcryptjs");
-    // stored password may contain whitespace — trim for safety
     return await bcrypt.compare(String(plain), String(this.password).trim());
   }
 
   generateAuthToken(): TokenPair {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    //   const jwtService = require("../service/jwtService");
     const payload: JwtPayload = {
       id: this.id,
       email: this.email,

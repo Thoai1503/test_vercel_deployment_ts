@@ -33,23 +33,6 @@ const vnpService = new VNPay({
   returnUrl: process.env.vnp_ReturnUrl,
 });
 
-// router.post("/create_payment_url", async (req: Request, res: Response) => {
-//   try {
-//     const orderId = (req.body?.orderId as string) || `${Date.now()}`;
-//     const amount = (req.body?.amount as number) || 100000;
-//     const payment = await vnpService.createPayment(orderId, amount, {
-//       ipAddress: getClientIp(req),
-//       orderInfo: req.body?.orderInfo,
-//       bankCode: req.body?.bankCode,
-//       orderType: req.body?.orderType,
-//       locale: req.body?.language,
-//     });
-//     return res.status(200).json({ url: payment.paymentUrl });
-//   } catch (e) {
-//     console.error("Error creating VNPAY url:", e);
-//     return res.status(500).json({ error: "Failed to create payment URL" });
-//   }
-// });
 const successfulVNPaymentResponse = async (
   verification: { isValid: boolean; params: Record<string, unknown> },
   res: Response
@@ -67,42 +50,12 @@ const successfulVNPaymentResponse = async (
 
       const user_id = orderData.user_id;
       const pendingOrder = await orderRepository.getPendingByUserId(user_id);
-      pendingOrder.setStatus(2);
+      pendingOrder.setStatus(2); // paid ---> status ==2
       const update = await orderRepository.update(
         pendingOrder.getId(),
         pendingOrder
       );
-      // const cartItems = await prisma.cart.findMany({
-      //   where: { user_id: user_id },
-      // });
-      // const total = cartItems.reduce(
-      //   (sum: number, item: any) =>
-      //     sum  + (item?.unit_price || 0) * (item.quantity || 0),
-      //   0
-      // );
 
-      //  const order = new Order(0, user_id, 0, total, address_id, 2);
-      // const orderId = await orderRepository.create(order);
-      // if (!orderId || orderId <= 0) {
-      //   return res.status(500).json({ message: "Failed to create order" });
-      // }
-
-      // const loop = await Promise.all(
-      //   cartItems.map((item) => {
-      //     const newOrderDetail = new OrderDetail(
-      //       0,
-      //       orderId,
-      //       item.variant_id,
-      //       item.quantity
-      //     );
-      //     return orderDetailRepository.create(newOrderDetail);
-      //   })
-      // );
-      // console.log("Loop:" + loop);
-      // if (loop.length == 0) {
-      //   throw new Error("Lỗi cập nhật đơn hàng");
-      // }
-      // const deleteCart = await cartRepository.deleteByUserId(user_id);
       return res.redirect(
         `https://electric-commercial.vercel.app/successful?id=${params?.vnp_TxnRef}&amount=${params?.vnp_Amount}`
       );
@@ -167,6 +120,7 @@ router.post("/create_payment_test", async (req: Request, res: Response) => {
   const order_id = await orderRepository.create(
     new Order(0, userId, 0, amount, address_id, 1)
   );
+
   const orderInfoBase64 = Buffer.from(orderInfo).toString("base64");
   const encodedOrderInfo = encodeURIComponent(orderInfoBase64);
 
