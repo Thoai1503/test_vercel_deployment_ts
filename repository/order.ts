@@ -37,7 +37,7 @@ export default class OrderRepository implements IRepository<Order> {
         },
       });
       const mappingList = list.map(
-        (item) =>
+        (item: any) =>
           new Order(
             item.id,
             item.user_id,
@@ -83,7 +83,7 @@ export default class OrderRepository implements IRepository<Order> {
       const list = await prisma.orders.findMany({
         where: { user_id: user_id },
       });
-      return list.map((item) => {
+      return list.map((item: any) => {
         const user = new User();
         return new Order(
           item.id,

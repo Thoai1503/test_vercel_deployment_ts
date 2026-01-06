@@ -4,6 +4,7 @@ import prisma from "../prisma/client.js";
 export default class CartRepository {
     constructor() { }
     async create(cart) {
+        console.log("Creating cart:", JSON.stringify(cart));
         try {
             const pool = await getPool();
             const request = pool.request();

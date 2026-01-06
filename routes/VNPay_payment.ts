@@ -131,7 +131,7 @@ router.post("/create_payment_test", async (req: Request, res: Response) => {
     });
   }
   const loop = await Promise.all(
-    cartItems.map((item) => {
+    cartItems.map((item: any) => {
       const newOrderDetail = new OrderDetail(
         0,
         order_id,

@@ -6,6 +6,7 @@ import prisma from "../prisma/client.js";
 export default class CartRepository implements IRepository<Cart> {
   constructor() {}
   async create(cart: Cart): Promise<number> {
+    console.log("Creating cart:", JSON.stringify(cart));
     try {
       const pool = await getPool();
       const request = pool.request();

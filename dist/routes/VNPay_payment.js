@@ -27,23 +27,6 @@ const vnpService = new VNPay({
     vnpUrl: process.env.vnp_Url,
     returnUrl: process.env.vnp_ReturnUrl,
 });
-// router.post("/create_payment_url", async (req: Request, res: Response) => {
-//   try {
-//     const orderId = (req.body?.orderId as string) || `${Date.now()}`;
-//     const amount = (req.body?.amount as number) || 100000;
-//     const payment = await vnpService.createPayment(orderId, amount, {
-//       ipAddress: getClientIp(req),
-//       orderInfo: req.body?.orderInfo,
-//       bankCode: req.body?.bankCode,
-//       orderType: req.body?.orderType,
-//       locale: req.body?.language,
-//     });
-//     return res.status(200).json({ url: payment.paymentUrl });
-//   } catch (e) {
-//     console.error("Error creating VNPAY url:", e);
-//     return res.status(500).json({ error: "Failed to create payment URL" });
-//   }
-// });
 const successfulVNPaymentResponse = async (verification, res) => {
     if (verification.isValid) {
         try {
