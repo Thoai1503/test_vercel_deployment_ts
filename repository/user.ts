@@ -22,7 +22,7 @@ export default class UserRepository {
 
       return new User({
         id: user.id,
-        name: user.name,
+        name: user.full_name,
         email: user.email,
         phone: user.phone,
         password: user.password,
