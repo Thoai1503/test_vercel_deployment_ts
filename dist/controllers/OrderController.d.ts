@@ -5,5 +5,6 @@ export default class OrderController {
     getAllOrder(req: Request, res: Response): Promise<Response>;
     getByUserId(req: Request, res: Response): Promise<Response>;
     createOrder(req: Request, res: Response): Promise<any>;
+    getById(req: Request, res: Response): Promise<Response>;
 }
 //# sourceMappingURL=OrderController.d.ts.map

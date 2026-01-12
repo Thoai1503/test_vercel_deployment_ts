@@ -52,6 +52,9 @@ const successfulVNPaymentResponse = async (verification, res) => {
 const failedVNPaymentResponse = async (verification, res) => {
     const orderData = parseOrderInfo(verification.params.vnp_OrderInfo);
     const user_id = orderData.user_id;
+    const pendingOrder = await orderRepository.getPendingByUserId(user_id);
+    pendingOrder.setStatus(3); // paid ---> status ==3 (failed)
+    const update = await orderRepository.update(pendingOrder.getId(), pendingOrder);
     const deleteCart = await cartRepository.deleteByUserId(user_id);
     return res.redirect(`https://electric-commercial.vercel.app/failed`);
 };

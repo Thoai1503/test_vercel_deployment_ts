@@ -8,4 +8,5 @@ router
   .route("/user/:user_id")
   .get(orderController.getByUserId.bind(orderController));
 
+router.route("/:id").get(orderController.getById.bind(orderController));
 export default router;

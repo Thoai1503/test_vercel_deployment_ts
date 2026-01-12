@@ -35,5 +35,10 @@ export default class OrderController {
     async createOrder(req, res) {
         // const result = await this.orderRepository.create;
     }
+    async getById(req, res) {
+        const { id } = req.params;
+        const order = await this.orderRepository.findById(Number(id));
+        return res.status(200).json(order);
+    }
 }
 //# sourceMappingURL=OrderController.js.map

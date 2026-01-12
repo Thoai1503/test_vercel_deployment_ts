@@ -45,4 +45,10 @@ export default class OrderController {
   async createOrder(req: Request, res: Response): Promise<any> {
     // const result = await this.orderRepository.create;
   }
+
+  async getById(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const order = await this.orderRepository.findById(Number(id));
+    return res.status(200).json(order);
+  }
 }

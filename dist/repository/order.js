@@ -23,7 +23,28 @@ export default class OrderRepository {
         }
     }
     async findById(id) {
-        throw new Error("Method not implemented.");
+        try {
+            const item = await prisma.orders.findUnique({
+                where: { id: id },
+                include: { users: true, order_detail: false, user_addresses: true },
+            });
+            if (item) {
+                const user = new User({
+                    id: item.users.id,
+                    name: item.users.full_name,
+                    email: item.users.email,
+                    phone: item.users.phone,
+                    password: "",
+                    role: 2,
+                    status: item.users.status,
+                });
+                return new Order(item.id, item.user_id, Number(item.discount), Number(item.total), item.address_id || undefined, item.status, item.created_at, user);
+            }
+            return null;
+        }
+        catch (error) {
+            throw error;
+        }
     }
     async findAll() {
         try {
