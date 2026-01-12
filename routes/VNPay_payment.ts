@@ -75,6 +75,12 @@ const failedVNPaymentResponse = async (
 ) => {
   const orderData = parseOrderInfo(verification.params.vnp_OrderInfo as string);
   const user_id = orderData.user_id;
+  const pendingOrder = await orderRepository.getPendingByUserId(user_id);
+  pendingOrder.setStatus(3); // paid ---> status ==3 (failed)
+  const update = await orderRepository.update(
+    pendingOrder.getId(),
+    pendingOrder
+  );
 
   const deleteCart = await cartRepository.deleteByUserId(user_id);
 
